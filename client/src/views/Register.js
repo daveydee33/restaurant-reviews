@@ -1,27 +1,97 @@
 // ** React Imports
-import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 
 // ** Custom Hooks
 import { useSkin } from '@hooks/useSkin'
+import useJwt from '@src/auth/jwt/useJwt'
+
+// ** Store & Actions
+import { useDispatch } from 'react-redux'
+import { handleLogin } from '@store/authentication'
+
+// ** Third Party Components
+import { useForm, Controller } from 'react-hook-form'
 
 // ** Icons Imports
 import { Facebook, Twitter, Mail, GitHub } from 'react-feather'
+
+// ** Context
+import { AbilityContext } from '@src/utility/context/Can'
 
 // ** Custom Components
 import InputPasswordToggle from '@components/input-password-toggle'
 
 // ** Reactstrap Imports
-import { Row, Col, CardTitle, CardText, Form, Label, Input, Button } from 'reactstrap'
+import { Row, Col, CardTitle, CardText, Form, Label, Input, Button, FormFeedback } from 'reactstrap'
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
 
+const defaultValues = {
+  email: '',
+  terms: false,
+  username: '',
+  password: ''
+}
+
 const Register = () => {
   // ** Hooks
+  const ability = useContext(AbilityContext)
   const { skin } = useSkin()
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const {
+    control,
+    setError,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({ defaultValues })
 
   const illustration = skin === 'dark' ? 'register-v2-dark.svg' : 'register-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
+
+  const onSubmit = data => {
+    const tempData = { ...data }
+    delete tempData.terms
+    if (Object.values(tempData).every(field => field.length > 0) && data.terms === true) {
+      const { username, email, password } = data
+      useJwt
+        .register({ username, email, password })
+        .then(res => {
+          if (res.data.error) {
+            for (const property in res.data.error) {
+              if (res.data.error[property] !== null) {
+                setError(property, {
+                  type: 'manual',
+                  message: res.data.error[property]
+                })
+              }
+            }
+          } else {
+            const data = { ...res.data.user, accessToken: res.data.accessToken }
+            ability.update(res.data.user.ability)
+            dispatch(handleLogin(data))
+            navigate('/')
+          }
+        })
+        .catch(err => console.log(err))
+    } else {
+      for (const key in data) {
+        if (data[key].length === 0) {
+          setError(key, {
+            type: 'manual',
+            message: `Please enter a valid ${key}`
+          })
+        }
+        if (key === 'terms' && data.terms === false) {
+          setError('terms', {
+            type: 'manual'
+          })
+        }
+      }
+    }
+  }
 
   return (
     <div className='auth-wrapper auth-cover'>
@@ -88,42 +158,75 @@ const Register = () => {
               Register
             </CardTitle>
             {/* <CardText className='mb-2'>Make your app management easy and fun!</CardText> */}
-            <Form className='auth-register-form mt-2' onSubmit={e => e.preventDefault()}>
+            <Form action='/' className='auth-register-form mt-2' onSubmit={handleSubmit(onSubmit)}>
               <div className='mb-1'>
                 <Label className='form-label' for='register-username'>
                   Username
                 </Label>
-                <Input type='text' id='register-username' placeholder='johndoe' autoFocus />
+                <Controller
+                  id='username'
+                  name='username'
+                  control={control}
+                  render={({ field }) => (
+                    <Input autoFocus placeholder='johndoe' invalid={errors.username && true} {...field} />
+                  )}
+                />
+                {errors.username ? <FormFeedback>{errors.username.message}</FormFeedback> : null}
               </div>
               <div className='mb-1'>
                 <Label className='form-label' for='register-email'>
                   Email
                 </Label>
-                <Input type='email' id='register-email' placeholder='john@example.com' />
+                <Controller
+                  id='email'
+                  name='email'
+                  control={control}
+                  render={({ field }) => (
+                    <Input type='email' placeholder='john@example.com' invalid={errors.email && true} {...field} />
+                  )}
+                />
+                {errors.email ? <FormFeedback>{errors.email.message}</FormFeedback> : null}
               </div>
               <div className='mb-1'>
                 <Label className='form-label' for='register-password'>
                   Password
                 </Label>
-                <InputPasswordToggle className='input-group-merge' id='register-password' />
+                <Controller
+                  id='password'
+                  name='password'
+                  control={control}
+                  render={({ field }) => (
+                    <InputPasswordToggle className='input-group-merge' invalid={errors.password && true} {...field} />
+                  )}
+                />
               </div>
-              {/* <div className='form-check mb-1'>
-                <Input type='checkbox' id='terms' />
+
+              {/* 
+              <div className='form-check mb-1'>
+                <Controller
+                  name='terms'
+                  control={control}
+                  render={({ field }) => (
+                    <Input {...field} id='terms' type='checkbox' checked={field.value} invalid={errors.terms && true} />
+                  )}
+                />
                 <Label className='form-check-label' for='terms'>
                   I agree to
                   <a className='ms-25' href='/' onClick={e => e.preventDefault()}>
                     privacy policy & terms
                   </a>
                 </Label>
-              </div> */}
-              <Button tag={Link} to='/' color='primary' block>
+              </div>
+              */}
+
+              <Button type='submit' block color='primary'>
                 Register
               </Button>
             </Form>
             <p className='text-center mt-2'>
               <span className='me-25'>Already have an account?</span>
               <Link to='/login'>
-                <span>Sign in instead</span>
+                <span>Login instead</span>
               </Link>
             </p>
             {/* 
