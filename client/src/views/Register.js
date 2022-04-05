@@ -81,8 +81,8 @@ const Register = () => {
               }
             }
           } else {
-            const data = { ...res.data.user, accessToken: res.data.accessToken }
-            ability.update(res.data.user.ability)
+            const data = { ...res.data.user, accessToken: res.data.tokens.access.token }
+            // ability.update(res.data.user.ability) // TODO:
             dispatch(handleLogin(data))
             navigate('/')
           }
