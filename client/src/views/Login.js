@@ -90,7 +90,6 @@ const Login = () => {
           // ))
         })
         .catch(err => {
-          console.log('DAVE login error')
           console.error(err)
           setErrorText(err.response.data.message)
         })

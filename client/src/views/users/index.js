@@ -1,8 +1,28 @@
 import { Card, CardHeader, CardBody, CardTitle, CardText, CardLink } from 'reactstrap'
+import { useContext, useEffect, useState } from 'react'
+import { itemContext } from '../../utility/context/item/ItemState'
 
 const SecondPage = () => {
+  const { getItems, items } = useContext(itemContext)
+
+  useEffect(() => {
+    getItems()
+  }, [])
+
+  if (items.length === 0) {
+    return <h4>...</h4>
+  }
+
   return (
     <div>
+      {items.results.map(item => {
+        return (
+          <Card key={item.id}>
+            <CardHeader>{item.email}</CardHeader>
+            <CardBody>{item.role}</CardBody>
+          </Card>
+        )
+      })}
       <Card>
         <CardHeader>
           <CardTitle>Kick start your project 🚀</CardTitle>
