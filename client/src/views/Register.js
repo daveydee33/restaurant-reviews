@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 // ** Custom Hooks
@@ -12,6 +12,8 @@ import { handleLogin } from '@store/authentication'
 
 // ** Third Party Components
 import { useForm, Controller } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Icons Imports
 import { Facebook, Twitter, Mail, GitHub } from 'react-feather'
@@ -23,18 +25,30 @@ import { AbilityContext } from '@src/utility/context/Can'
 import InputPasswordToggle from '@components/input-password-toggle'
 
 // ** Reactstrap Imports
-import { Row, Col, CardTitle, CardText, Form, Label, Input, Button, FormFeedback } from 'reactstrap'
+import { Row, Col, CardTitle, CardText, Form, Label, Input, Button, FormFeedback, Alert } from 'reactstrap'
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
 
 const defaultValues = {
   email: '',
-  username: '',
   password: ''
 }
 
 const Register = () => {
+  // field validations
+  const SignupSchema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .min(8)
+      .matches(
+        /^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
+        'password must contain at least 1 number and 1 letter'
+      )
+      .required()
+  })
+
   // ** Hooks
   const ability = useContext(AbilityContext)
   const { skin } = useSkin()
@@ -45,16 +59,17 @@ const Register = () => {
     setError,
     handleSubmit,
     formState: { errors }
-  } = useForm({ defaultValues })
+  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(SignupSchema) })
+  const [errorText, setErrorText] = useState('')
 
   const illustration = skin === 'dark' ? 'register-v2-dark.svg' : 'register-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
 
   const onSubmit = data => {
     if (Object.values(data).every(field => field.length > 0)) {
-      const { username, email, password } = data
+      const { email, password } = data
       useJwt
-        .register({ username, email, password })
+        .register({ email, password })
         .then(res => {
           if (res.data.error) {
             for (const property in res.data.error) {
@@ -72,7 +87,10 @@ const Register = () => {
             navigate('/')
           }
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.error(err)
+          setErrorText(err.response.data.message)
+        })
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -151,6 +169,7 @@ const Register = () => {
             </CardTitle>
             {/* <CardText className='mb-2'>Make your app management easy and fun!</CardText> */}
             <Form action='/' className='auth-register-form mt-2' onSubmit={handleSubmit(onSubmit)}>
+              {/*               
               <div className='mb-1'>
                 <Label className='form-label' for='register-username'>
                   Username
@@ -165,6 +184,8 @@ const Register = () => {
                 />
                 {errors.username ? <FormFeedback>{errors.username.message}</FormFeedback> : null}
               </div>
+ */}
+
               <div className='mb-1'>
                 <Label className='form-label' for='register-email'>
                   Email
@@ -191,7 +212,16 @@ const Register = () => {
                     <InputPasswordToggle className='input-group-merge' invalid={errors.password && true} {...field} />
                   )}
                 />
+                {errors.password ? <FormFeedback>{errors.password.message}</FormFeedback> : null}
               </div>
+              {errorText && (
+                <Alert color='danger'>
+                  <div className='alert-body'>
+                    {/* <span className='fw-bold'>Error</span> */}
+                    <span>{errorText}</span>
+                  </div>
+                </Alert>
+              )}
               <Button type='submit' block color='primary'>
                 Register
               </Button>
