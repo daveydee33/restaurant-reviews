@@ -30,7 +30,6 @@ import '@styles/react/pages/page-authentication.scss'
 
 const defaultValues = {
   email: '',
-  terms: false,
   username: '',
   password: ''
 }
@@ -52,9 +51,7 @@ const Register = () => {
     source = require(`@src/assets/images/pages/${illustration}`).default
 
   const onSubmit = data => {
-    const tempData = { ...data }
-    delete tempData.terms
-    if (Object.values(tempData).every(field => field.length > 0) && data.terms === true) {
+    if (Object.values(data).every(field => field.length > 0)) {
       const { username, email, password } = data
       useJwt
         .register({ username, email, password })
@@ -82,11 +79,6 @@ const Register = () => {
           setError(key, {
             type: 'manual',
             message: `Please enter a valid ${key}`
-          })
-        }
-        if (key === 'terms' && data.terms === false) {
-          setError('terms', {
-            type: 'manual'
           })
         }
       }
@@ -200,25 +192,6 @@ const Register = () => {
                   )}
                 />
               </div>
-
-              {/* 
-              <div className='form-check mb-1'>
-                <Controller
-                  name='terms'
-                  control={control}
-                  render={({ field }) => (
-                    <Input {...field} id='terms' type='checkbox' checked={field.value} invalid={errors.terms && true} />
-                  )}
-                />
-                <Label className='form-check-label' for='terms'>
-                  I agree to
-                  <a className='ms-25' href='/' onClick={e => e.preventDefault()}>
-                    privacy policy & terms
-                  </a>
-                </Label>
-              </div>
-              */}
-
               <Button type='submit' block color='primary'>
                 Register
               </Button>
@@ -229,25 +202,6 @@ const Register = () => {
                 <span>Login instead</span>
               </Link>
             </p>
-            {/* 
-            <div className='divider my-2'>
-              <div className='divider-text'>or</div>
-            </div>
-            <div className='auth-footer-btn d-flex justify-content-center'>
-              <Button color='facebook'>
-                <Facebook size={14} />
-              </Button>
-              <Button color='twitter'>
-                <Twitter size={14} />
-              </Button>
-              <Button color='google'>
-                <Mail size={14} />
-              </Button>
-              <Button className='me-0' color='github'>
-                <GitHub size={14} />
-              </Button>
-            </div>
-            */}
           </Col>
         </Col>
       </Row>
