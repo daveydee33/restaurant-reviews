@@ -85,9 +85,9 @@ const Register = () => {
         <Col className='d-flex align-items-center auth-bg px-2 p-lg-5' lg='4' sm='12'>
           <Col className='px-xl-2 mx-auto' xs='12' sm='8' md='6' lg='12'>
             <CardTitle tag='h2' className='fw-bold mb-1'>
-              Adventure starts here 🚀
+              Register
             </CardTitle>
-            <CardText className='mb-2'>Make your app management easy and fun!</CardText>
+            {/* <CardText className='mb-2'>Make your app management easy and fun!</CardText> */}
             <Form className='auth-register-form mt-2' onSubmit={e => e.preventDefault()}>
               <div className='mb-1'>
                 <Label className='form-label' for='register-username'>
@@ -107,7 +107,7 @@ const Register = () => {
                 </Label>
                 <InputPasswordToggle className='input-group-merge' id='register-password' />
               </div>
-              <div className='form-check mb-1'>
+              {/* <div className='form-check mb-1'>
                 <Input type='checkbox' id='terms' />
                 <Label className='form-check-label' for='terms'>
                   I agree to
@@ -115,9 +115,9 @@ const Register = () => {
                     privacy policy & terms
                   </a>
                 </Label>
-              </div>
+              </div> */}
               <Button tag={Link} to='/' color='primary' block>
-                Sign up
+                Register
               </Button>
             </Form>
             <p className='text-center mt-2'>
@@ -126,6 +126,7 @@ const Register = () => {
                 <span>Sign in instead</span>
               </Link>
             </p>
+            {/* 
             <div className='divider my-2'>
               <div className='divider-text'>or</div>
             </div>
@@ -143,6 +144,7 @@ const Register = () => {
                 <GitHub size={14} />
               </Button>
             </div>
+            */}
           </Col>
         </Col>
       </Row>
