@@ -4,10 +4,10 @@ const { objectId } = require('./custom.validation');
 const createRestaurant = {
   body: Joi.object().keys({
     title: Joi.string().required(),
-    description: Joi.string().allow(''),
-    details: Joi.string().allow(''),
-    tags: Joi.array().items(Joi.string().allow('')),
-    items: Joi.array().items(Joi.string()).unique(),
+    // description: Joi.string().allow(''),
+    // details: Joi.string().allow(''),
+    // tags: Joi.array().items(Joi.string().allow('')),
+    // items: Joi.array().items(Joi.string()).unique(),
   }),
 };
 
@@ -25,21 +25,21 @@ const getRestaurants = {
 
 const getRestaurant = {
   params: Joi.object().keys({
-    restaurantId: Joi.string().custom(objectId),
+    restaurantId: Joi.string().required().custom(objectId),
   }),
 };
 
 const updateRestaurant = {
   params: Joi.object().keys({
-    restaurantId: Joi.required().custom(objectId),
+    restaurantId: Joi.string().required().custom(objectId),
   }),
   body: Joi.object()
     .keys({
       title: Joi.string(),
-      description: Joi.string().allow(''),
-      details: Joi.string().allow(''),
-      tags: Joi.array().items(Joi.string().allow('')),
-      items: Joi.array().items(Joi.string()).unique(),
+      // description: Joi.string().allow(''),
+      // details: Joi.string().allow(''),
+      // tags: Joi.array().items(Joi.string().allow('')),
+      // items: Joi.array().items(Joi.string()).unique(),
     })
     .min(1),
 };

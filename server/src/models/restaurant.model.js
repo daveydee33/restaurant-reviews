@@ -8,23 +8,23 @@ const restaurantSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
-    description: {
-      type: String,
-      required: false,
-      trim: true,
-    },
-    details: {
-      type: String,
-      required: false,
-      trim: true,
-    },
-    tags: {
-      type: [String],
-    },
-    items: {
-      type: [{ type: String, required: true, trim: true }],
-      required: false,
-    },
+    // description: {
+    //   type: String,
+    //   required: false,
+    //   trim: true,
+    // },
+    // details: {
+    //   type: String,
+    //   required: false,
+    //   trim: true,
+    // },
+    // tags: {
+    //   type: [String],
+    // },
+    // items: {
+    //   type: [{ type: String, required: true, trim: true }],
+    //   required: false,
+    // },
   },
   {
     timestamps: true,

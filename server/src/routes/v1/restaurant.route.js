@@ -8,14 +8,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(validate(restaurantValidation.getRestaurants), restaurantController.getRestaurants)
+  .get(auth('getRestaurants'), validate(restaurantValidation.getRestaurants), restaurantController.getRestaurants)
   .post(auth('manageRestaurants'), validate(restaurantValidation.createRestaurant), restaurantController.createRestaurant);
 
-// TODO: re-add the auth() to each of these routes
 router
   .route('/:restaurantId')
-  .get(validate(restaurantValidation.getRestaurant), restaurantController.getRestaurant)
-  .patch(auth('manageRestaurants'), validate(restaurantValidation.updateRestaurant), restaurantController.updateRestaurant)
+  .get(auth('getRestaurants'), validate(restaurantValidation.getRestaurant), restaurantController.getRestaurant)
+  .put(auth('manageRestaurants'), validate(restaurantValidation.updateRestaurant), restaurantController.updateRestaurant)
   .delete(auth('manageRestaurants'), validate(restaurantValidation.deleteRestaurant), restaurantController.deleteRestaurant);
 
 module.exports = router;
