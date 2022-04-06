@@ -1,12 +1,10 @@
-// import { Card, CardHeader, CardBody, CardTitle, CardText, CardLink } from 'reactstrap'
 import { useContext, useEffect } from 'react'
 import { itemContext } from '../../utility/context/item/ItemState'
 
 import { MoreVertical, Edit, Trash } from 'react-feather'
 import { Table, Badge, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
-import classnames from 'classnames'
 
-const SecondPage = () => {
+const UsersPage = () => {
   const { getItems, items } = useContext(itemContext)
 
   useEffect(() => {
@@ -37,19 +35,8 @@ const SecondPage = () => {
                 </Badge>
               </td>
               <td>
-                <UncontrolledDropdown>
-                  <DropdownToggle className='icon-btn hide-arrow' color='transparent' size='sm' caret>
-                    <MoreVertical size={15} />
-                  </DropdownToggle>
-                  <DropdownMenu>
-                    <DropdownItem href='/' onClick={e => e.preventDefault()}>
-                      <Edit className='me-50' size={15} /> <span className='align-middle'>Edit</span>
-                    </DropdownItem>
-                    <DropdownItem href='/' onClick={e => e.preventDefault()}>
-                      <Trash className='me-50' size={15} /> <span className='align-middle'>Delete</span>
-                    </DropdownItem>
-                  </DropdownMenu>
-                </UncontrolledDropdown>
+                <Edit size={15} className='m-1' />
+                <Trash size={15} className='m-1' />
               </td>
             </tr>
           )
@@ -57,19 +44,6 @@ const SecondPage = () => {
       </tbody>
     </Table>
   )
-
-  // return (
-  //   <div>
-  //     {items.results.map(item => {
-  //       return (
-  //         <Card key={item.id}>
-  //           <CardHeader>{item.email}</CardHeader>
-  //           <CardBody>{item.role}</CardBody>
-  //         </Card>
-  //       )
-  //     })}
-  //   </div>
-  // )
 }
 
-export default SecondPage
+export default UsersPage
