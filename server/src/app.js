@@ -52,6 +52,13 @@ if (config.env === 'production') {
 
 // v1 api routes
 app.use('/v1', routes);
+// React App
+// Serve static assets in production
+if (process.env.NODE_ENV === 'production') {
+  // Set static folder
+  app.use(express.static('../client/build'));
+  app.get('/*', (req, res) => res.sendFile(path.resolve(__dirname, '../../client/build/index.html')));
+}
 
 // send back a 404 error for any unknown api request
 app.use((req, res, next) => {
