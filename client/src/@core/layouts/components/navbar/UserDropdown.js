@@ -19,7 +19,7 @@ import { User, Mail, CheckSquare, MessageSquare, Settings, CreditCard, HelpCircl
 import { UncontrolledDropdown, DropdownMenu, DropdownToggle, DropdownItem } from 'reactstrap'
 
 // ** Default Avatar Image
-import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
+import defaultAvatar from '@src/assets/images/portrait/small/avatar-default.png'
 
 const UserDropdown = () => {
   // ** Store Vars
@@ -46,6 +46,9 @@ const UserDropdown = () => {
           <span className='user-status'>{(userData && userData.role) || 'Role'}</span>
         </div>
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
+        {/* <span tag={Link} to='/login' onClick={() => dispatch(handleLogout())} className='align-middle ms-1'>
+          Logout
+        </span> */}
       </DropdownToggle>
       <DropdownMenu end>
         <DropdownItem tag={Link} to='/login' onClick={() => dispatch(handleLogout())}>

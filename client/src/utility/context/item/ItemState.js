@@ -4,7 +4,7 @@ import axios from 'axios'
 
 import itemReducer from './itemReducer'
 
-import { GET_ITEMS, ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, SET_CURRENT, CLEAR_CURRENT } from './types'
+import { GET_ITEMS, ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, SET_CURRENT, CLEAR_CURRENT, RESET_TO_DEFAULT } from './types'
 
 export const itemContext = createContext()
 
@@ -74,8 +74,13 @@ export const ItemState = props => {
   }
 
   // Clear Current Item
-  const clearCurrent = item => {
+  const clearCurrent = () => {
     dispatch({ type: CLEAR_CURRENT })
+  }
+
+  // Clear All / Reset to Defaults
+  const resetToDefault = () => {
+    dispatch({ type: RESET_TO_DEFAULT, payload: initialState })
   }
 
   return (
@@ -89,7 +94,8 @@ export const ItemState = props => {
         updateItem,
         deleteItem,
         setCurrent,
-        clearCurrent
+        clearCurrent,
+        resetToDefault
       }}
     >
       {props.children}

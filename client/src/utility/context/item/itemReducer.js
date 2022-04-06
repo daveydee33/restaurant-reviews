@@ -1,4 +1,4 @@
-import { GET_ITEMS, ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, SET_CURRENT, CLEAR_CURRENT } from './types'
+import { GET_ITEMS, ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, SET_CURRENT, CLEAR_CURRENT, RESET_TO_DEFAULT } from './types'
 
 export default (state, action) => {
   switch (action.type) {
@@ -40,6 +40,10 @@ export default (state, action) => {
       return {
         ...state,
         current: null
+      }
+    case RESET_TO_DEFAULT:
+      return {
+        ...action.payload
       }
 
     default:

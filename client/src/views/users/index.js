@@ -5,9 +5,10 @@ import { MoreVertical, Edit, Trash } from 'react-feather'
 import { Table, Badge, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
 
 const UsersPage = () => {
-  const { getItems, items } = useContext(itemContext)
+  const { getItems, items, resetToDefault } = useContext(itemContext)
 
   useEffect(() => {
+    resetToDefault()
     getItems()
   }, [])
 
