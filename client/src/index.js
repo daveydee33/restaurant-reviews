@@ -3,12 +3,13 @@ import ReactDOM from 'react-dom'
 import { Suspense, lazy } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 
+import { ItemState } from './utility/context/item/ItemState'
+
 // ** Redux Imports
 import { store } from './redux/store'
 import { Provider } from 'react-redux'
 
 // ** ThemeColors Context
-
 import { ThemeContext } from './utility/context/ThemeColors'
 
 // ** ThemeConfig
@@ -49,8 +50,10 @@ ReactDOM.render(
     <Provider store={store}>
       <Suspense fallback={<Spinner />}>
         <ThemeContext>
-          <LazyApp />
-          <Toaster position={themeConfig.layout.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+          <ItemState>
+            <LazyApp />
+            <Toaster position={themeConfig.layout.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+          </ItemState>
         </ThemeContext>
       </Suspense>
     </Provider>

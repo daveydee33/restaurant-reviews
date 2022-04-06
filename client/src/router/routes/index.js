@@ -27,6 +27,7 @@ const DefaultRoute = '/home'
 
 const Home = lazy(() => import('../../views/Home'))
 const SecondPage = lazy(() => import('../../views/SecondPage'))
+const Users = lazy(() => import('../../views/users/index'))
 const Login = lazy(() => import('../../views/Login'))
 const Register = lazy(() => import('../../views/Register'))
 const ForgotPassword = lazy(() => import('../../views/ForgotPassword'))
@@ -46,6 +47,10 @@ const Routes = [
   {
     path: '/second-page',
     element: <SecondPage />
+  },
+  {
+    path: '/users',
+    element: <Users />
   },
   {
     path: '/login',
