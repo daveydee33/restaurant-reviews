@@ -5,7 +5,7 @@ import { MoreVertical, Edit, Trash } from 'react-feather'
 import { Table, Badge, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
 
 const UsersPage = () => {
-  const { getItems, items, resetToDefault } = useContext(itemContext)
+  const { items, getItems, deleteItem, resetToDefault } = useContext(itemContext)
 
   useEffect(() => {
     resetToDefault()
@@ -26,7 +26,7 @@ const UsersPage = () => {
         </tr>
       </thead>
       <tbody>
-        {items.results.map(item => {
+        {items.map(item => {
           return (
             <tr key={item.id}>
               <td>{item.email}</td>
@@ -37,7 +37,7 @@ const UsersPage = () => {
               </td>
               <td>
                 <Edit size={15} className='m-1' />
-                <Trash size={15} className='m-1' />
+                <Trash size={15} className='m-1' onClick={() => deleteItem(item.id)} />
               </td>
             </tr>
           )
