@@ -40,14 +40,14 @@ export const RestaurantState = props => {
   }
 
   // Update Restaurant
-  const updateRestaurant = async restaurant => {
+  const updateRestaurant = async (id, data) => {
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     }
     try {
-      const res = await axios.put(`/v1/restaurants/${restaurant._id}`, restaurant, config)
+      const res = await axios.put(`/v1/restaurants/${id}`, data, config)
       dispatch({ type: UPDATE_ITEM, payload: res.data })
     } catch (err) {
       console.error('Update Restaurant error', err)

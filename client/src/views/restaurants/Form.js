@@ -23,13 +23,11 @@ const FormPanel = props => {
   const {
     open,
     handleFormPanel,
-    // store,
-    // dispatch,
-    // updateSingleCollection,
     selectedRestaurant,
     setSelectedRestaurant,
-    addRestaurant
-    // deleteCollection
+    addRestaurant,
+    deleteRestaurant,
+    updateRestaurant
   } = props
 
   const [title, setTitle] = useState('')
@@ -69,32 +67,32 @@ const FormPanel = props => {
           <Button.Ripple
             color='primary'
             disabled={!title.length}
-            className='update-btn update-todo-item mr-1'
+            className='m-1'
             onClick={() => {
-              // dispatch(updateSingleCollection(selectedRestaurant.id, payload))
-              // handleFormPanel()
+              updateRestaurant(selectedRestaurant.id, payload)
+              handleFormPanel()
             }}
           >
             Update
           </Button.Ripple>
-          <Button.Ripple color='secondary' onClick={handleResetFields} outline>
+          {/* <Button.Ripple color='secondary' onClick={handleResetFields} outline>
             Reset
-          </Button.Ripple>
+          </Button.Ripple> */}
 
           {!isObjEmpty(selectedRestaurant) ? (
             <Button.Ripple
               color='danger'
-              className='ml-1'
+              className='m-1'
               onClick={() => {
-                // dispatch(deleteCollection(selectedRestaurant.id))
-                // handleFormPanel()
+                deleteRestaurant(selectedRestaurant.id)
+                handleFormPanel()
               }}
               outline
             >
               Delete
             </Button.Ripple>
           ) : null}
-          <Button color='secondary' onClick={handleFormPanel} outline>
+          <Button className='m-1' color='secondary' onClick={handleFormPanel} outline>
             Cancel
           </Button>
         </Fragment>
@@ -105,7 +103,7 @@ const FormPanel = props => {
           <Button
             color='primary'
             disabled={!title.length}
-            className='add-todo-item mr-1'
+            className='add-todo-item m-1'
             onClick={() => {
               addRestaurant(payload)
               handleFormPanel()

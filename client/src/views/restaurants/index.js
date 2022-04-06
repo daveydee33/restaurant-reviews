@@ -5,7 +5,8 @@ import { Table, Button } from 'reactstrap'
 import Form from './Form'
 
 const UsersPage = () => {
-  const { restaurants, getRestaurants, addRestaurant, deleteRestaurant, resetToDefault } = useContext(restaurantContext)
+  const { restaurants, getRestaurants, addRestaurant, deleteRestaurant, updateRestaurant, resetToDefault } =
+    useContext(restaurantContext)
   const [selectedRestaurant, setSelectedRestaurant] = useState({})
   const [openFormPanel, setOpenFormPanel] = useState(false)
 
@@ -61,8 +62,8 @@ const UsersPage = () => {
         // dispatch={dispatch}
         open={openFormPanel}
         addRestaurant={addRestaurant}
-        // updateSingleCollection={updateSingleCollection}
-        // deleteCollection={deleteCollection}
+        updateRestaurant={updateRestaurant}
+        deleteRestaurant={deleteRestaurant}
         selectedRestaurant={selectedRestaurant}
         setSelectedRestaurant={setSelectedRestaurant}
         handleFormPanel={handleFormPanel}

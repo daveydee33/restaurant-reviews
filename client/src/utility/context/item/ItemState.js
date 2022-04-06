@@ -40,14 +40,14 @@ export const ItemState = props => {
   }
 
   // Update Item
-  const updateItem = async item => {
+  const updateItem = async (id, data) => {
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     }
     try {
-      const res = await axios.put(`/v1/users/${item._id}`, item, config)
+      const res = await axios.put(`/v1/users/${id}`, data, config)
       dispatch({ type: UPDATE_ITEM, payload: res.data })
     } catch (err) {
       console.error('Update error', err)
