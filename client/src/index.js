@@ -42,6 +42,7 @@ import './assets/scss/style.scss'
 
 // ** Service Worker
 import * as serviceWorker from './serviceWorker'
+import { RestaurantState } from './utility/context/restaurant/RestaurantState'
 
 // ** Lazy load app
 const LazyApp = lazy(() => import('./App'))
@@ -50,10 +51,12 @@ ReactDOM.render(
     <Provider store={store}>
       <Suspense fallback={<Spinner />}>
         <ThemeContext>
-          <ItemState>
-            <LazyApp />
-            <Toaster position={themeConfig.layout.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-          </ItemState>
+          <RestaurantState>
+            <ItemState>
+              <LazyApp />
+              <Toaster position={themeConfig.layout.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
+            </ItemState>
+          </RestaurantState>
         </ThemeContext>
       </Suspense>
     </Provider>

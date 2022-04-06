@@ -1,18 +1,18 @@
 import { useContext, useEffect } from 'react'
-import { itemContext } from '../../utility/context/item/ItemState'
+import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
 
 import { MoreVertical, Edit, Trash } from 'react-feather'
-import { Table, Badge, UncontrolledDropdown, DropdownMenu, DropdownItem, DropdownToggle } from 'reactstrap'
+import { Table, Badge, UncontrolledDropdown, DropdownMenu, Dropdownrestaurant, DropdownToggle } from 'reactstrap'
 
 const UsersPage = () => {
-  const { getItems, items, resetToDefault } = useContext(itemContext)
+  const { getRestaurants, restaurants, resetToDefault } = useContext(restaurantContext)
 
   useEffect(() => {
     resetToDefault()
-    getItems()
+    getRestaurants()
   }, [])
 
-  if (items.length === 0) {
+  if (restaurants.length === 0) {
     return <h4>Nothing to show</h4>
   }
 
@@ -20,21 +20,19 @@ const UsersPage = () => {
     <Table responsive>
       <thead>
         <tr>
-          <th>User</th>
-          <th>Role</th>
+          <th>Restaurant</th>
+          <th>Average Score</th>
+          <th># of Reviews</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        {items.results.map(item => {
+        {restaurants.results.map(restaurant => {
           return (
-            <tr key={item.id}>
-              <td>{item.email}</td>
-              <td>
-                <Badge pill className='me-1' color={item.role === 'admin' ? 'light-warning' : 'light-info'}>
-                  {item.role}
-                </Badge>
-              </td>
+            <tr key={restaurant.id}>
+              <td>{restaurant.title}</td>
+              <td>{3.5}</td>
+              <td>{'99'}</td>
               <td>
                 <Edit size={15} className='m-1' />
                 <Trash size={15} className='m-1' />
