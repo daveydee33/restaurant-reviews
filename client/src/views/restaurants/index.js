@@ -41,7 +41,7 @@ const UsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          {restaurants.results.map(restaurant => {
+          {restaurants.map(restaurant => {
             return (
               <tr key={restaurant.id}>
                 <td>{restaurant.title}</td>
