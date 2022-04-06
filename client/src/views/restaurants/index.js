@@ -5,7 +5,7 @@ import { Table, Button } from 'reactstrap'
 import Form from './Form'
 
 const UsersPage = () => {
-  const { restaurants, getRestaurants, addRestaurant, resetToDefault } = useContext(restaurantContext)
+  const { restaurants, getRestaurants, addRestaurant, deleteRestaurant, resetToDefault } = useContext(restaurantContext)
   const [selectedRestaurant, setSelectedRestaurant] = useState({})
   const [openFormPanel, setOpenFormPanel] = useState(false)
 
@@ -16,13 +16,13 @@ const UsersPage = () => {
 
   const handleFormPanel = () => setOpenFormPanel(!openFormPanel)
 
-  function handleRestaurantClick(restaurant) {
+  const handleRestaurantClick = restaurant => {
     setSelectedRestaurant(restaurant)
     handleFormPanel()
   }
 
-  if (restaurants.length === 0) {
-    return <div />
+  const handleDelete = id => {
+    deleteRestaurant(id)
   }
 
   return (
@@ -49,7 +49,7 @@ const UsersPage = () => {
                 <td>{'99'}</td>
                 <td>
                   <Edit size={15} className='m-1' onClick={() => handleRestaurantClick(restaurant)} />
-                  <Trash size={15} className='m-1' />
+                  <Trash size={15} className='m-1' onClick={() => handleDelete(restaurant.id)} />
                 </td>
               </tr>
             )

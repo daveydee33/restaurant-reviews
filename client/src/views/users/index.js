@@ -12,10 +12,6 @@ const UsersPage = () => {
     getItems()
   }, [])
 
-  if (items.length === 0) {
-    return <h4>Nothing to show</h4>
-  }
-
   return (
     <Table hover responsive>
       <thead>
