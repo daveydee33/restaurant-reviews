@@ -11,7 +11,7 @@ export default (state, action) => {
     case ADD_ITEM:
       return {
         ...state,
-        items: [action.payload, ...state.items]
+        items: [...state.items, action.payload]
       }
     case UPDATE_ITEM:
       return {

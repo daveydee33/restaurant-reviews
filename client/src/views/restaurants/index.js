@@ -1,25 +1,25 @@
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
-
 import { MoreVertical, Edit, Trash } from 'react-feather'
-import {
-  Table,
-  Badge,
-  UncontrolledDropdown,
-  DropdownMenu,
-  Dropdownrestaurant,
-  DropdownToggle,
-  Card,
-  Button
-} from 'reactstrap'
+import { Table, Button } from 'reactstrap'
+import Form from './Form'
 
 const UsersPage = () => {
-  const { getRestaurants, restaurants, resetToDefault } = useContext(restaurantContext)
+  const { restaurants, getRestaurants, addRestaurant, resetToDefault } = useContext(restaurantContext)
+  const [selectedRestaurant, setSelectedRestaurant] = useState({})
+  const [openFormPanel, setOpenFormPanel] = useState(false)
 
   useEffect(() => {
     resetToDefault()
     getRestaurants()
   }, [])
+
+  const handleFormPanel = () => setOpenFormPanel(!openFormPanel)
+
+  function handleRestaurantClick(restaurant) {
+    setSelectedRestaurant(restaurant)
+    handleFormPanel()
+  }
 
   if (restaurants.length === 0) {
     return <div />
@@ -27,7 +27,7 @@ const UsersPage = () => {
 
   return (
     <>
-      <Button color='primary' className='m-1'>
+      <Button color='primary' className='m-1' onClick={handleFormPanel}>
         Add Restaurant
       </Button>
 
@@ -48,7 +48,7 @@ const UsersPage = () => {
                 <td>{3.5}</td>
                 <td>{'99'}</td>
                 <td>
-                  <Edit size={15} className='m-1' />
+                  <Edit size={15} className='m-1' onClick={() => handleRestaurantClick(restaurant)} />
                   <Trash size={15} className='m-1' />
                 </td>
               </tr>
@@ -56,6 +56,17 @@ const UsersPage = () => {
           })}
         </tbody>
       </Table>
+      <Form
+        // store={store}
+        // dispatch={dispatch}
+        open={openFormPanel}
+        addRestaurant={addRestaurant}
+        // updateSingleCollection={updateSingleCollection}
+        // deleteCollection={deleteCollection}
+        selectedRestaurant={selectedRestaurant}
+        setSelectedRestaurant={setSelectedRestaurant}
+        handleFormPanel={handleFormPanel}
+      ></Form>
     </>
   )
 }
