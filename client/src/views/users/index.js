@@ -17,7 +17,7 @@ const UsersPage = () => {
   }
 
   return (
-    <Table responsive>
+    <Table hover responsive>
       <thead>
         <tr>
           <th>User</th>

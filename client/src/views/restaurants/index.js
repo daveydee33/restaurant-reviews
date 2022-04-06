@@ -13,11 +13,11 @@ const UsersPage = () => {
   }, [])
 
   if (restaurants.length === 0) {
-    return <h4>Nothing to show</h4>
+    return <div />
   }
 
   return (
-    <Table responsive>
+    <Table hover responsive>
       <thead>
         <tr>
           <th>Restaurant</th>
