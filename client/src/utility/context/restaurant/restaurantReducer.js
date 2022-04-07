@@ -1,4 +1,13 @@
-import { GET_ITEMS, ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, SET_CURRENT, CLEAR_CURRENT, RESET_TO_DEFAULT } from './types'
+import {
+  GET_ITEMS,
+  GET_ITEM,
+  ADD_ITEM,
+  UPDATE_ITEM,
+  DELETE_ITEM,
+  SET_CURRENT,
+  CLEAR_CURRENT,
+  RESET_TO_DEFAULT
+} from './types'
 
 export default (state, action) => {
   switch (action.type) {
@@ -6,6 +15,12 @@ export default (state, action) => {
       return {
         ...state,
         restaurants: action.payload.results,
+        loading: false
+      }
+    case GET_ITEM:
+      return {
+        ...state,
+        current: action.payload,
         loading: false
       }
     case ADD_ITEM:

@@ -1,6 +1,15 @@
 import { createContext, useReducer } from 'react'
 import restaurantReducer from './restaurantReducer'
-import { GET_ITEMS, ADD_ITEM, UPDATE_ITEM, DELETE_ITEM, SET_CURRENT, CLEAR_CURRENT, RESET_TO_DEFAULT } from './types'
+import {
+  GET_ITEMS,
+  GET_ITEM,
+  ADD_ITEM,
+  UPDATE_ITEM,
+  DELETE_ITEM,
+  SET_CURRENT,
+  CLEAR_CURRENT,
+  RESET_TO_DEFAULT
+} from './types'
 import axios from 'axios'
 
 export const restaurantContext = createContext()
@@ -19,6 +28,16 @@ export const RestaurantState = props => {
     try {
       const res = await axios.get('/v1/restaurants', { params: { limit: 1000 } })
       dispatch({ type: GET_ITEMS, payload: res.data })
+    } catch (err) {
+      console.error('Get Restaurants error')
+    }
+  }
+
+  // Get Restaurant
+  const getRestaurant = async id => {
+    try {
+      const res = await axios.get(`/v1/restaurants/${id}`, { params: { limit: 1000 } })
+      dispatch({ type: GET_ITEM, payload: res.data })
     } catch (err) {
       console.error('Get Restaurants error')
     }
@@ -87,6 +106,7 @@ export const RestaurantState = props => {
         loading: state.loading,
         current: state.current,
         getRestaurants,
+        getRestaurant,
         addRestaurant,
         updateRestaurant,
         deleteRestaurant,
