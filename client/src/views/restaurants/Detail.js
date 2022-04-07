@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import { Card, CardHeader, CardBody, CardTitle, CardText } from 'reactstrap'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
 import StarRatings from 'react-star-ratings'
+import BreadCrumbs from '@components/breadcrumbs'
 
 const SecondPage = () => {
   const params = useParams()
@@ -16,12 +17,22 @@ const SecondPage = () => {
 
   return (
     <>
-      <h1>
-        {id} - {current?.title}
-      </h1>
-      <StarRatings rating={current?.reviewAvg} starRatedColor='gold' starDimension='2rem' starSpacing='0' />
-      <p>Total Reviews: {current?.reviews?.length}</p>
-      <p>Average Score: {current?.reviewAvg}</p>
+      <BreadCrumbs title='Restaurant Details' data={[{ title: 'Restaurant Details' }]} />
+
+      <Card className='text-center mb-3'>
+        <CardBody>
+          <h1>{current?.title}</h1>
+          <CardText>Total Reviews: {current?.reviews?.length}</CardText>
+          <CardText>Average Score: {current?.reviewAvg.toFixed(1)}</CardText>
+          <StarRatings
+            rating={current?.reviewAvg}
+            starRatedColor='gold'
+            starDimension='2rem'
+            starSpacing='0'
+            className='m-5'
+          />
+        </CardBody>
+      </Card>
 
       {current?.reviews.map(review => {
         return (
