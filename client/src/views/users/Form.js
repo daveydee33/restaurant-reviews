@@ -25,7 +25,7 @@ const ModalHeader = props => {
 }
 
 const FormPanel = props => {
-  const { open, handleFormPanel, selectedItem, setSelectedItem, addItem, deleteItem, updateItem } = props
+  const { open, handleFormPanel, selectedUser, setSelectedUser, addUser, deleteUser, updateUser } = props
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -64,7 +64,7 @@ const FormPanel = props => {
   const [errorText, setErrorText] = useState('')
 
   const handleSidebarTitle = () => {
-    if (!isObjEmpty(selectedItem)) {
+    if (!isObjEmpty(selectedUser)) {
       return 'Edit User'
     } else {
       return 'Add User'
@@ -80,7 +80,7 @@ const FormPanel = props => {
     }
     if (Object.values(data).every(field => field.length > 0)) {
       try {
-        addItem(data)
+        addUser(data)
         handleFormPanel()
       } catch (error) {
         console.log('ERROR')
@@ -127,12 +127,12 @@ const FormPanel = props => {
   }
 
   const handleResetFields = () => {
-    const { email } = selectedItem
+    const { email } = selectedUser
     setEmail(email)
   }
 
   const handleSidebarOpened = () => {
-    if (!isObjEmpty(selectedItem)) {
+    if (!isObjEmpty(selectedUser)) {
       handleResetFields()
     }
   }
@@ -140,7 +140,7 @@ const FormPanel = props => {
   const handleSidebarClosed = () => {
     setEmail('')
     setPassword('')
-    setSelectedItem({})
+    setSelectedUser({})
   }
 
   const renderFooterButtons = () => {
@@ -149,7 +149,7 @@ const FormPanel = props => {
       password
     }
 
-    if (!isObjEmpty(selectedItem)) {
+    if (!isObjEmpty(selectedUser)) {
       return (
         <Fragment>
           <Button.Ripple
@@ -157,7 +157,7 @@ const FormPanel = props => {
             disabled={!email.length}
             className='m-1'
             onClick={() => {
-              // updateItem(selectedItem.id, payload)
+              // updateUser(selectedUser.id, payload)
               // handleFormPanel()
             }}
           >
@@ -167,12 +167,12 @@ const FormPanel = props => {
             Reset
           </Button.Ripple> */}
 
-          {!isObjEmpty(selectedItem) ? (
+          {!isObjEmpty(selectedUser) ? (
             <Button.Ripple
               color='danger'
               className='m-1'
               onClick={() => {
-                deleteItem(selectedItem.id)
+                deleteUser(selectedUser.id)
                 handleFormPanel()
               }}
               outline

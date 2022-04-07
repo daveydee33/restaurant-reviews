@@ -16,12 +16,6 @@ export default (state, action) => {
     case UPDATE_ITEM:
       return {
         ...state,
-        // idea 1 - push the new restaurant to the front of the array, and remove it's previous record out of it's place in the array
-        // restaurants: [
-        //   action.payload,
-        //   ...state.restaurants.filter(restaurant => restaurant.id !== action.payload.id)
-        // ],
-        // idea 2 - this will replace the restaurant in it's existing position in the array.  I think I like this method better, because I can always sort the array by dateModified later.
         restaurants: state.restaurants.map(restaurant => {
           return restaurant.id === action.payload.id ? action.payload : restaurant
         }),

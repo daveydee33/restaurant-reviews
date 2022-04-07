@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom'
 import { Suspense, lazy } from 'react'
 import { BrowserRouter } from 'react-router-dom'
 
-import { ItemState } from './utility/context/item/ItemState'
-
 // ** Redux Imports
 import { store } from './redux/store'
 import { Provider } from 'react-redux'
@@ -42,6 +40,8 @@ import './assets/scss/style.scss'
 
 // ** Service Worker
 import * as serviceWorker from './serviceWorker'
+
+import { UserState } from './utility/context/user/UserState'
 import { RestaurantState } from './utility/context/restaurant/RestaurantState'
 
 // ** Lazy load app
@@ -52,10 +52,10 @@ ReactDOM.render(
       <Suspense fallback={<Spinner />}>
         <ThemeContext>
           <RestaurantState>
-            <ItemState>
+            <UserState>
               <LazyApp />
               <Toaster position={themeConfig.layout.toastPosition} toastOptions={{ className: 'react-hot-toast' }} />
-            </ItemState>
+            </UserState>
           </RestaurantState>
         </ThemeContext>
       </Suspense>
