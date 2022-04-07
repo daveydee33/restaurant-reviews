@@ -17,7 +17,7 @@ export const ItemState = props => {
   // Get Items
   const getItems = async () => {
     try {
-      const res = await axios.get('/v1/users')
+      const res = await axios.get('/v1/users', { params: { limit: 1000 } })
       dispatch({ type: GET_ITEMS, payload: res.data })
     } catch (err) {
       console.error('Get error')

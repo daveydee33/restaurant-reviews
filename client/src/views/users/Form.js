@@ -78,9 +78,6 @@ const FormPanel = props => {
       password,
       role: role.value
     }
-
-    console.log('data', data)
-
     if (Object.values(data).every(field => field.length > 0)) {
       try {
         addItem(data)

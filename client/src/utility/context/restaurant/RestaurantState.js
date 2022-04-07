@@ -17,7 +17,7 @@ export const RestaurantState = props => {
   // Get Restaurants
   const getRestaurants = async () => {
     try {
-      const res = await axios.get('/v1/restaurants')
+      const res = await axios.get('/v1/restaurants', { params: { limit: 1000 } })
       dispatch({ type: GET_ITEMS, payload: res.data })
     } catch (err) {
       console.error('Get Restaurants error')
