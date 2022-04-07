@@ -24,32 +24,20 @@ const restaurantSchema = mongoose.Schema(
             type: Date,
             required: true,
           },
-          // _id: false,
         },
       ],
     },
-    // description: {
-    //   type: String,
-    //   required: false,
-    //   trim: true,
-    // },
-    // details: {
-    //   type: String,
-    //   required: false,
-    //   trim: true,
-    // },
-    // tags: {
-    //   type: [String],
-    // },
-    // items: {
-    //   type: [{ type: String, required: true, trim: true }],
-    //   required: false,
-    // },
   },
   {
     timestamps: true,
+    toJSON: { virtuals: true },
   }
 );
+
+restaurantSchema.virtual('reviewAvg').get(function () {
+  const reviewTotal = this.reviews.reduce((sum, cur) => sum + cur.rating, 0);
+  return reviewTotal / this.reviews.length;
+});
 
 // add plugin that converts mongoose to json
 restaurantSchema.plugin(toJSON);
