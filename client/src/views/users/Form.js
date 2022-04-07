@@ -20,8 +20,8 @@ const ModalHeader = props => {
 const FormPanel = props => {
   const { open, handleFormPanel, selectedUser, setSelectedUser, addUser, deleteUser, updateUser } = props
 
-  const [email, setEmail] = useState()
-  const [password, setPassword] = useState()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [role, setRole] = useState()
   const [errorText, setErrorText] = useState()
 
@@ -61,8 +61,8 @@ const FormPanel = props => {
   const handleResetFields = () => {
     const { email, role } = selectedUser
     setEmail(email)
-    // setRole()
     setPassword()
+    setRole({ label: role, value: role })
   }
 
   const handleSidebarOpened = () => {
@@ -82,7 +82,7 @@ const FormPanel = props => {
     const payload = {
       email,
       password,
-      role
+      role: role?.value
     }
 
     if (!isObjEmpty(selectedUser)) {
