@@ -32,7 +32,7 @@ export const RestaurantState = props => {
       }
     }
     try {
-      const res = await axios.post('/api/restaurants', restaurant, config)
+      const res = await axios.post('/v1/restaurants', restaurant, config)
       dispatch({ type: ADD_ITEM, payload: res.data })
     } catch (err) {
       console.error('Add Restaurant error', err)
@@ -40,14 +40,14 @@ export const RestaurantState = props => {
   }
 
   // Update Restaurant
-  const updateRestaurant = async restaurant => {
+  const updateRestaurant = async (id, data) => {
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     }
     try {
-      const res = await axios.put(`/api/restaurants/${restaurant._id}`, restaurant, config)
+      const res = await axios.put(`/v1/restaurants/${id}`, data, config)
       dispatch({ type: UPDATE_ITEM, payload: res.data })
     } catch (err) {
       console.error('Update Restaurant error', err)
@@ -57,7 +57,7 @@ export const RestaurantState = props => {
   // Delete Restaurant
   const deleteRestaurant = async id => {
     try {
-      const res = await axios.delete(`/api/restaurants/${id}`)
+      const res = await axios.delete(`/v1/restaurants/${id}`)
       console.log(`Deleting restaurant: ${id}`, res.data)
       dispatch({ type: DELETE_ITEM, payload: id })
     } catch (err) {

@@ -5,13 +5,13 @@ export default (state, action) => {
     case GET_ITEMS:
       return {
         ...state,
-        restaurants: action.payload,
+        restaurants: action.payload.results,
         loading: false
       }
     case ADD_ITEM:
       return {
         ...state,
-        restaurants: [action.payload, ...state.restaurants]
+        restaurants: [...state.restaurants, action.payload]
       }
     case UPDATE_ITEM:
       return {
@@ -19,18 +19,18 @@ export default (state, action) => {
         // idea 1 - push the new restaurant to the front of the array, and remove it's previous record out of it's place in the array
         // restaurants: [
         //   action.payload,
-        //   ...state.restaurants.filter(restaurant => restaurant._id !== action.payload._id)
+        //   ...state.restaurants.filter(restaurant => restaurant.id !== action.payload.id)
         // ],
         // idea 2 - this will replace the restaurant in it's existing position in the array.  I think I like this method better, because I can always sort the array by dateModified later.
         restaurants: state.restaurants.map(restaurant => {
-          return restaurant._id === action.payload._id ? action.payload : restaurant
+          return restaurant.id === action.payload.id ? action.payload : restaurant
         }),
         loading: false
       }
     case DELETE_ITEM:
       return {
         ...state,
-        restaurants: state.restaurants.filter(restaurant => restaurant._id !== action.payload),
+        restaurants: state.restaurants.filter(restaurant => restaurant.id !== action.payload),
         loading: false
       }
     case SET_CURRENT:
