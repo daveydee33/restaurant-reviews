@@ -59,7 +59,7 @@ const Routes = [
     element: <Restaurants />
   },
   {
-    path: '/restaurants/detail/:id',
+    path: '/restaurants/:id',
     element: <RestaurantDetail />
   },
   {

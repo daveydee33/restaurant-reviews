@@ -3,8 +3,12 @@ import { restaurantContext } from '../../utility/context/restaurant/RestaurantSt
 import { Edit, Trash } from 'react-feather'
 import { Table, Button } from 'reactstrap'
 import Form from './Form'
+import { useNavigate } from 'react-router-dom'
+import StarRatings from 'react-star-ratings'
+import BreadCrumbs from '@components/breadcrumbs'
 
 const UsersPage = () => {
+  const navigate = useNavigate()
   const { restaurants, getRestaurants, addRestaurant, deleteRestaurant, updateRestaurant, resetToDefault } =
     useContext(restaurantContext)
   const [selectedRestaurant, setSelectedRestaurant] = useState({})
@@ -18,6 +22,13 @@ const UsersPage = () => {
   const handleFormPanel = () => setOpenFormPanel(!openFormPanel)
 
   const handleRestaurantClick = restaurant => {
+    // setSelectedRestaurant(restaurant)
+    // handleFormPanel()
+    navigate(`/restaurants/${restaurant.id}`)
+  }
+
+  const handleEditClick = (e, restaurant) => {
+    e.stopPropagation()
     setSelectedRestaurant(restaurant)
     handleFormPanel()
   }
@@ -29,6 +40,9 @@ const UsersPage = () => {
 
   return (
     <>
+      {/* <BreadCrumbs title='Restaurants' data={[]} /> */}
+      <h1 className='my-1'>Restaurants</h1>
+
       <Button color='primary' className='m-1' onClick={handleFormPanel}>
         Add Restaurant
       </Button>
@@ -37,7 +51,8 @@ const UsersPage = () => {
         <thead>
           <tr>
             <th>Restaurant</th>
-            <th>Average Score</th>
+            <th>Rating</th>
+            <th>Avg Review</th>
             <th># of Reviews</th>
             <th>Actions</th>
           </tr>
@@ -47,10 +62,19 @@ const UsersPage = () => {
             return (
               <tr key={restaurant.id} onClick={() => handleRestaurantClick(restaurant)}>
                 <td>{restaurant.title}</td>
-                <td>{3.5}</td>
-                <td>{'99'}</td>
                 <td>
-                  <Edit size={15} className='m-1' />
+                  <StarRatings
+                    rating={restaurant?.reviewAvg || 0}
+                    starRatedColor='gold'
+                    starDimension='1.5rem'
+                    starSpacing='0'
+                    className='m-5'
+                  />
+                </td>
+                <td>{restaurant?.reviewAvg?.toFixed(1)}</td>
+                <td>{restaurant?.reviews?.length}</td>
+                <td>
+                  <Edit size={15} className='m-1' onClick={e => handleEditClick(e, restaurant)} />
                   <Trash size={15} className='m-1' onClick={e => handleDelete(e, restaurant.id)} />
                 </td>
               </tr>

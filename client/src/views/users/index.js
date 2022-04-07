@@ -28,6 +28,7 @@ const UsersPage = () => {
 
   return (
     <>
+      <h1 className='my-1'>Users</h1>
       <Button color='primary' className='m-1' onClick={handleFormPanel}>
         Add User
       </Button>

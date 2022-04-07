@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { Card, CardHeader, CardBody, CardTitle, CardText } from 'reactstrap'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
 import StarRatings from 'react-star-ratings'
@@ -17,15 +17,18 @@ const SecondPage = () => {
 
   return (
     <>
-      <BreadCrumbs title='Restaurant Details' data={[{ title: 'Restaurant Details' }]} />
+      <h1 className='my-1'>Restaurant Details</h1>
+      <h4>
+        <Link to='/'>{'< Back'}</Link>
+      </h4>
 
       <Card className='text-center mb-3'>
         <CardBody>
           <h1>{current?.title}</h1>
-          <CardText>Total Reviews: {current?.reviews?.length}</CardText>
-          <CardText>Average Score: {current?.reviewAvg.toFixed(1)}</CardText>
+          <CardText>Total Reviews: {current?.reviews?.length || 0}</CardText>
+          <CardText>Average Score: {current?.reviewAvg?.toFixed(1)}</CardText>
           <StarRatings
-            rating={current?.reviewAvg}
+            rating={current?.reviewAvg || 0}
             starRatedColor='gold'
             starDimension='2rem'
             starSpacing='0'
