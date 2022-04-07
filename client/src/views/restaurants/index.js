@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from 'react'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
-import { MoreVertical, Edit, Trash } from 'react-feather'
+import { Edit, Trash } from 'react-feather'
 import { Table, Button } from 'reactstrap'
 import Form from './Form'
 
@@ -22,7 +22,8 @@ const UsersPage = () => {
     handleFormPanel()
   }
 
-  const handleDelete = id => {
+  const handleDelete = (e, id) => {
+    e.stopPropagation()
     deleteRestaurant(id)
   }
 
@@ -44,13 +45,13 @@ const UsersPage = () => {
         <tbody>
           {restaurants.map(restaurant => {
             return (
-              <tr key={restaurant.id}>
+              <tr key={restaurant.id} onClick={() => handleRestaurantClick(restaurant)}>
                 <td>{restaurant.title}</td>
                 <td>{3.5}</td>
                 <td>{'99'}</td>
                 <td>
-                  <Edit size={15} className='m-1' onClick={() => handleRestaurantClick(restaurant)} />
-                  <Trash size={15} className='m-1' onClick={() => handleDelete(restaurant.id)} />
+                  <Edit size={15} className='m-1' />
+                  <Trash size={15} className='m-1' onClick={e => handleDelete(e, restaurant.id)} />
                 </td>
               </tr>
             )
@@ -58,8 +59,6 @@ const UsersPage = () => {
         </tbody>
       </Table>
       <Form
-        // store={store}
-        // dispatch={dispatch}
         open={openFormPanel}
         addRestaurant={addRestaurant}
         updateRestaurant={updateRestaurant}
@@ -67,7 +66,7 @@ const UsersPage = () => {
         selectedRestaurant={selectedRestaurant}
         setSelectedRestaurant={setSelectedRestaurant}
         handleFormPanel={handleFormPanel}
-      ></Form>
+      />
     </>
   )
 }
