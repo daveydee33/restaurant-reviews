@@ -67,10 +67,26 @@ const deleteRestaurantById = async (restaurantId) => {
   return restaurant;
 };
 
+/**
+ * Submit review to restaurant by id
+ * @param {ObjectId} restaurantId
+ * @returns {Promise<Review>}
+ */
+const submitReview = async (id, review) => {
+  const restaurant = await getRestaurantById(id);
+  if (!restaurant) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Restaurant not found');
+  }
+  Object.assign(restaurant, { reviews: [review, ...restaurant.reviews] });
+  await restaurant.save();
+  return restaurant;
+};
+
 module.exports = {
   createRestaurant,
   queryRestaurants,
   getRestaurantById,
   updateRestaurantById,
   deleteRestaurantById,
+  submitReview,
 };
