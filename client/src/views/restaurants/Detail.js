@@ -10,7 +10,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 const SecondPage = () => {
   const params = useParams()
   const { id } = params
-  const { getRestaurant, current } = useContext(restaurantContext)
+  const { getRestaurant, current, submitReview } = useContext(restaurantContext)
   const [rating, setRating] = useState()
   const [comment, setComment] = useState()
   const [dateVisited, setDateVisited] = useState()
@@ -19,15 +19,18 @@ const SecondPage = () => {
     getRestaurant(id)
   }, [])
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
-    const payload = { rating, comment, dateVisited }
-    console.log(payload)
-
+    const payload = { rating, comment, dateVisited: dateVisited[0] }
     try {
-      submitReview(payload)
+      await submitReview(id, payload)
+      setRating()
+      setComment('')
+      setDateVisited()
+      getRestaurant(id)
+    } catch (error) {
       // TODO:
-    } catch (error) {}
+    }
   }
 
   return (

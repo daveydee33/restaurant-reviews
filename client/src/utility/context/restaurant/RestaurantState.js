@@ -8,7 +8,8 @@ import {
   DELETE_ITEM,
   SET_CURRENT,
   CLEAR_CURRENT,
-  RESET_TO_DEFAULT
+  RESET_TO_DEFAULT,
+  SUBMIT_REVIEW
 } from './types'
 import axios from 'axios'
 
@@ -99,6 +100,22 @@ export const RestaurantState = props => {
     dispatch({ type: RESET_TO_DEFAULT, payload: initialState })
   }
 
+  // Submit Review
+  const submitReview = async (id, payload) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    console.log('what', id, payload)
+    try {
+      const res = await axios.post(`/v1/restaurants/${id}/reviews`, payload, config)
+      dispatch({ type: SUBMIT_REVIEW, payload: res.data })
+    } catch (err) {
+      console.error('Submit review error', err)
+    }
+  }
+
   return (
     <restaurantContext.Provider
       value={{
@@ -112,7 +129,8 @@ export const RestaurantState = props => {
         deleteRestaurant,
         setCurrent,
         clearCurrent,
-        resetToDefault
+        resetToDefault,
+        submitReview
       }}
     >
       {props.children}

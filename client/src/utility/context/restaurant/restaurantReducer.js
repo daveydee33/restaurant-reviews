@@ -6,7 +6,8 @@ import {
   DELETE_ITEM,
   SET_CURRENT,
   CLEAR_CURRENT,
-  RESET_TO_DEFAULT
+  RESET_TO_DEFAULT,
+  SUBMIT_REVIEW
 } from './types'
 
 export default (state, action) => {
@@ -55,6 +56,11 @@ export default (state, action) => {
     case RESET_TO_DEFAULT:
       return {
         ...action.payload
+      }
+    case SUBMIT_REVIEW:
+      return {
+        ...state
+        // TODO: add review? or just fetch again?
       }
 
     default:
