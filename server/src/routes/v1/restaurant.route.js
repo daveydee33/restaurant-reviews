@@ -17,6 +17,10 @@ router
   .put(auth('manageRestaurants'), validate(restaurantValidation.updateRestaurant), restaurantController.updateRestaurant)
   .delete(auth('manageRestaurants'), validate(restaurantValidation.deleteRestaurant), restaurantController.deleteRestaurant);
 
+router
+  .route('/:restaurantId/reviews')
+  .post(auth('submitReview'), validate(restaurantValidation.submitReview), restaurantController.submitReview);
+
 module.exports = router;
 
 /**
