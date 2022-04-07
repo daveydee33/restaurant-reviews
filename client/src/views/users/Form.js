@@ -1,13 +1,9 @@
 import { useState, Fragment, useEffect } from 'react'
 import { X, Plus, Trash } from 'react-feather'
-import { Modal, ModalBody, Button, Form, FormGroup, Input, Label, FormFeedback, Alert } from 'reactstrap'
+import { Modal, ModalBody, Button, Form, FormGroup, Input, Label, Alert } from 'reactstrap'
 import Select from 'react-select'
 import { isObjEmpty, selectThemeColors } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
-import { useForm, Controller } from 'react-hook-form'
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import InputPasswordToggle from '@components/input-password-toggle'
 
 const ModalHeader = props => {
   const { children, handleFormPanel } = props
@@ -22,44 +18,17 @@ const ModalHeader = props => {
 }
 
 const FormPanel = props => {
+  const { open, handleFormPanel, selectedUser, setSelectedUser, addUser, deleteUser, updateUser } = props
+
+  const [email, setEmail] = useState()
+  const [password, setPassword] = useState()
+  const [role, setRole] = useState()
+  const [errorText, setErrorText] = useState()
+
   const roleOptions = [
     { value: 'user', label: 'user' },
     { value: 'admin', label: 'admin' }
   ]
-
-  const defaultValues = {
-    email: '',
-    password: '',
-    role: roleOptions[0]
-  }
-
-  // field validations
-  const SignupSchema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup
-      .string()
-      .min(8)
-      .matches(
-        /^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
-        'password must contain at least 1 number and 1 letter'
-      )
-      .required()
-  })
-
-  const {
-    control,
-    setError,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(SignupSchema) })
-
-  const [errorText, setErrorText] = useState('') // TODO:
-
-  const { open, handleFormPanel, selectedUser, setSelectedUser, addUser, deleteUser, updateUser } = props
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  // const role  TODO:
 
   const handleSidebarTitle = () => {
     if (!isObjEmpty(selectedUser)) {
@@ -69,69 +38,31 @@ const FormPanel = props => {
     }
   }
 
-  const onSubmit = async formData => {
-    const { email, password, role } = formData
+  const handleSubmit = async () => {
     const data = {
       email,
       password,
-      role: role.value
+      role
     }
-    if (Object.values(data).every(field => field.length > 0)) {
-      try {
-        const res = await addUser(data)
-        if (!res) {
-          handleFormPanel()
-        } else {
-          setErrorText(res)
-        }
-      } catch (error) {
-        console.log('ERROR')
-        console.log(error)
-      }
 
-      // useJwt
-      //   .register({ email, password })
-      //   .then(res => {
-      //     if (res.data.error) {
-      //       for (const property in res.data.error) {
-      //         if (res.data.error[property] !== null) {
-      //           setError(property, {
-      //             type: 'manual',
-      //             message: res.data.error[property]
-      //           })
-      //         }
-      //       }
-      //     } else {
-      //       const data = {
-      //         ...res.data.user,
-      //         accessToken: res.data.tokens.access.token,
-      //         refreshToken: res.data.tokens.refresh.token
-      //       }
-      //       // ability.update(res.data.user.ability) // TODO:
-      //       // dispatch(handleLogin(data))
-      //       // navigate('/')
-      //     }
-      //   })
-      //   .catch(err => {
-      //     console.error(err)
-      //     setErrorText(err.response.data.message)
-      //   })
-    } else {
-      for (const key in data) {
-        if (data[key].length === 0) {
-          setError(key, {
-            type: 'manual',
-            message: `Please enter a valid ${key}`
-          })
-        }
+    try {
+      const res = await addUser(data)
+      if (!res) {
+        handleFormPanel()
+      } else {
+        setErrorText(res)
       }
+    } catch (error) {
+      console.log('ERROR')
+      console.log(error)
     }
   }
 
   const handleResetFields = () => {
-    const { email } = selectedUser
+    const { email, role } = selectedUser
     setEmail(email)
-    setPassword('')
+    // setRole()
+    setPassword()
   }
 
   const handleSidebarOpened = () => {
@@ -141,15 +72,17 @@ const FormPanel = props => {
   }
 
   const handleSidebarClosed = () => {
-    setEmail('')
-    setPassword('')
+    setEmail()
+    setPassword()
+    setRole()
     setSelectedUser({})
   }
 
   const renderFooterButtons = () => {
     const payload = {
       email,
-      password
+      password,
+      role
     }
 
     if (!isObjEmpty(selectedUser)) {
@@ -195,10 +128,9 @@ const FormPanel = props => {
             color='primary'
             // disabled={!email.length}
             className='add-todo-item m-1'
-            // onClick={() => {
-            //   handleSubmit(onSubmit)
-            // }}
-            type='submit'
+            onClick={() => {
+              handleSubmit()
+            }}
           >
             Create
           </Button>
@@ -220,7 +152,7 @@ const FormPanel = props => {
       onClosed={handleSidebarClosed}
       modalClassName='modal-slide-in sidebar-todo-modal'
     >
-      <Form action='/' onSubmit={handleSubmit(onSubmit)}>
+      <Form id='form-modal-todo' className='todo-modal' onSubmit={e => e.preventDefault()}>
         <ModalHeader
           // dispatch={dispatch}
           handleFormPanel={handleFormPanel}
@@ -228,60 +160,42 @@ const FormPanel = props => {
           {handleSidebarTitle()}
         </ModalHeader>
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
-          <div className='mb-1'>
-            <Label className='form-label' for='register-email'>
-              Email
+          <FormGroup>
+            <Label for='email' className='form-label'>
+              Email <span className='text-danger'>*</span>
             </Label>
-            <Controller
-              id='email'
-              name='email'
-              control={control}
-              render={({ field }) => (
-                <Input type='email' placeholder='john@example.com' invalid={errors.email && true} {...field} />
-              )}
-            />
-            {errors.email ? <FormFeedback>{errors.email.message}</FormFeedback> : null}
-          </div>
-          <div className='mb-1'>
-            <Label className='form-label' for='register-password'>
+            <Input id='email' value={email} placeholder='Title' onChange={e => setEmail(e.target.value)} />
+          </FormGroup>
+
+          <FormGroup>
+            <Label for='password' className='form-label'>
               Password
             </Label>
-            <Controller
+            <Input
               id='password'
-              name='password'
-              control={control}
-              render={({ field }) => (
-                <InputPasswordToggle className='input-group-merge' invalid={errors.password && true} {...field} />
-              )}
+              value={password}
+              placeholder='password'
+              onChange={e => setPassword(e.target.value)}
+              type='password'
             />
-            {errors.password ? <FormFeedback>{errors.password.message}</FormFeedback> : null}
-          </div>
+          </FormGroup>
 
-          <div className='mb-1'>
-            <Label className='form-label' for='register-role'>
+          <FormGroup>
+            <Label for='role' className='form-label'>
               Role
             </Label>
-
-            <Controller
+            <Select
               id='role'
-              name='role'
-              control={control}
-              render={({ field }) => (
-                <Select
-                  id='role'
-                  theme={selectThemeColors}
-                  className='react-select'
-                  classNamePrefix='select'
-                  // defaultValue={roleOptions[0]}
-                  options={roleOptions}
-                  isClearable={false}
-                  invalid={errors.role && true}
-                  {...field}
-                />
-              )}
+              theme={selectThemeColors}
+              className='react-select'
+              classNamePrefix='select'
+              // defaultValue={roleOptions[0]}
+              value={role}
+              options={roleOptions}
+              isClearable={false}
+              onChange={obj => setRole(obj)}
             />
-            {errors.role ? <FormFeedback>{errors.role.message}</FormFeedback> : null}
-          </div>
+          </FormGroup>
 
           {errorText && (
             <Alert color='danger'>
