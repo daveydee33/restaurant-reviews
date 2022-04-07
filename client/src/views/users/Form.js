@@ -1,9 +1,7 @@
 import { useState, Fragment, useEffect } from 'react'
-import _cloneDeep from 'lodash/cloneDeep'
 import { X, Plus, Trash } from 'react-feather'
-import CreatableSelect from 'react-select/creatable'
-import Repeater from '@components/repeater'
-import { Modal, ModalBody, Button, Form, FormGroup, Input, Label } from 'reactstrap'
+import { Modal, ModalBody, Button, Form, FormGroup, Input, Label, Alert } from 'reactstrap'
+import Select from 'react-select'
 import { isObjEmpty, selectThemeColors } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
 
@@ -20,49 +18,82 @@ const ModalHeader = props => {
 }
 
 const FormPanel = props => {
-  const { open, handleFormPanel, selectedItem, setSelectedItem, addItem, deleteItem, updateItem } = props
+  const { open, handleFormPanel, selectedUser, setSelectedUser, addUser, deleteUser, updateUser } = props
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [role, setRole] = useState()
+  const [errorText, setErrorText] = useState()
+
+  const roleOptions = [
+    { value: 'user', label: 'user' },
+    { value: 'admin', label: 'admin' }
+  ]
 
   const handleSidebarTitle = () => {
-    if (!isObjEmpty(selectedItem)) {
-      return 'Edit Item'
+    if (!isObjEmpty(selectedUser)) {
+      return 'Edit User'
     } else {
-      return 'Add Item'
+      return 'Add User'
+    }
+  }
+
+  const handleSubmit = async () => {
+    const data = {
+      email,
+      password,
+      role
+    }
+
+    try {
+      const res = await addUser(data)
+      if (!res) {
+        handleFormPanel()
+      } else {
+        setErrorText(res)
+      }
+    } catch (error) {
+      console.log('ERROR')
+      console.log(error)
     }
   }
 
   const handleResetFields = () => {
-    const { title } = selectedItem
-    setTitle(title)
+    const { email, role } = selectedUser
+    setEmail(email)
+    setPassword()
+    setRole({ label: role, value: role })
   }
 
   const handleSidebarOpened = () => {
-    if (!isObjEmpty(selectedItem)) {
+    if (!isObjEmpty(selectedUser)) {
       handleResetFields()
     }
   }
 
   const handleSidebarClosed = () => {
-    setTitle('')
-    setSelectedItem({})
+    setEmail()
+    setPassword()
+    setRole()
+    setSelectedUser({})
   }
 
   const renderFooterButtons = () => {
     const payload = {
-      title
+      email,
+      password,
+      role: role?.value
     }
 
-    if (!isObjEmpty(selectedItem)) {
+    if (!isObjEmpty(selectedUser)) {
       return (
         <Fragment>
           <Button.Ripple
             color='primary'
-            disabled={!title.length}
+            // disabled={!email.length}
             className='m-1'
             onClick={() => {
-              updateItem(selectedItem.id, payload)
+              updateUser(selectedUser.id, payload)
               handleFormPanel()
             }}
           >
@@ -72,12 +103,12 @@ const FormPanel = props => {
             Reset
           </Button.Ripple> */}
 
-          {!isObjEmpty(selectedItem) ? (
+          {!isObjEmpty(selectedUser) ? (
             <Button.Ripple
               color='danger'
               className='m-1'
               onClick={() => {
-                deleteItem(selectedItem.id)
+                deleteUser(selectedUser.id)
                 handleFormPanel()
               }}
               outline
@@ -95,11 +126,10 @@ const FormPanel = props => {
         <Fragment>
           <Button
             color='primary'
-            disabled={!title.length}
+            // disabled={!email.length}
             className='add-todo-item m-1'
             onClick={() => {
-              addItem(payload)
-              handleFormPanel()
+              handleSubmit()
             }}
           >
             Create
@@ -131,76 +161,49 @@ const FormPanel = props => {
         </ModalHeader>
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
           <FormGroup>
-            <Label for='title' className='form-label'>
-              Title <span className='text-danger'>*</span>
+            <Label for='email' className='form-label'>
+              Email <span className='text-danger'>*</span>
             </Label>
-            <Input
-              id='title'
-              value={title}
-              placeholder='Title'
-              className='new-todo-item-title'
-              onChange={e => setTitle(e.target.value)}
-            />
+            <Input id='email' value={email} placeholder='Title' onChange={e => setEmail(e.target.value)} />
           </FormGroup>
 
-          {/* <FormGroup>
-            <Label for='description' className='form-label'>
-              Description
+          <FormGroup>
+            <Label for='password' className='form-label'>
+              Password
             </Label>
             <Input
-              id='description'
-              value={description}
-              placeholder='Description'
-              onChange={e => setDescription(e.target.value)}
+              id='password'
+              value={password}
+              placeholder='password'
+              onChange={e => setPassword(e.target.value)}
+              type='password'
             />
           </FormGroup>
 
           <FormGroup>
-            <Label for='details' className='form-label'>
-              Details
+            <Label for='role' className='form-label'>
+              Role
             </Label>
-            <Input
-              id='details'
-              value={details}
-              placeholder='Details'
-              type='textarea'
-              rows={6}
-              onChange={e => setDetails(e.target.value)}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label for='items' className='form-label'>
-              Words / Phrases (<i>one per line</i>)
-            </Label>
-            <Input
-              id='items'
-              value={items}
-              placeholder='Word list'
-              type='textarea'
-              rows={6}
-              onChange={e => setItems(e.target.value)}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label for='tags' className='form-label'>
-              Tags
-            </Label>
-            <CreatableSelect
-              isMulti
-              value={tags}
-              id='tags'
-              isClearable={false}
-              options={tagOptions}
+            <Select
+              id='role'
+              theme={selectThemeColors}
               className='react-select'
               classNamePrefix='select'
-              theme={selectThemeColors}
-              onChange={(data, actionMeta) => {
-                setTags(data !== null ? [...data] : [])
-              }}
+              // defaultValue={roleOptions[0]}
+              value={role}
+              options={roleOptions}
+              isClearable={false}
+              onChange={obj => setRole(obj)}
             />
-          </FormGroup> */}
+          </FormGroup>
+
+          {errorText && (
+            <Alert color='danger'>
+              <div className='alert-body'>
+                <span>{errorText}</span>
+              </div>
+            </Alert>
+          )}
 
           <FormGroup className='my-1'>{renderFooterButtons()}</FormGroup>
         </ModalBody>

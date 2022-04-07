@@ -1,29 +1,29 @@
 import { useContext, useEffect, useState } from 'react'
-import { itemContext } from '../../utility/context/item/ItemState'
+import { userContext } from '../../utility/context/user/UserState'
 import { Edit, Trash } from 'react-feather'
 import { Table, Badge, Button } from 'reactstrap'
 import Form from './Form'
 
 const UsersPage = () => {
-  const { items, getItems, addItem, deleteItem, updateItem, resetToDefault } = useContext(itemContext)
-  const [selectedItem, setSelectedItem] = useState({})
+  const { users, getUsers, addUser, deleteUser, updateUser, resetToDefault } = useContext(userContext)
+  const [selectedUser, setSelectedUser] = useState({})
   const [openFormPanel, setOpenFormPanel] = useState(false)
 
   useEffect(() => {
     resetToDefault()
-    getItems()
+    getUsers()
   }, [])
 
   const handleFormPanel = () => setOpenFormPanel(!openFormPanel)
 
-  const handleItemClick = item => {
-    setSelectedItem(item)
+  const handleUserClick = user => {
+    setSelectedUser(user)
     handleFormPanel()
   }
 
   const handleDelete = (e, id) => {
     e.stopPropagation()
-    deleteItem(id)
+    deleteUser(id)
   }
 
   return (
@@ -40,18 +40,18 @@ const UsersPage = () => {
           </tr>
         </thead>
         <tbody>
-          {items.map(item => {
+          {users.map(user => {
             return (
-              <tr key={item.id} onClick={() => handleItemClick(item)}>
-                <td>{item.email}</td>
+              <tr key={user.id} onClick={() => handleUserClick(user)}>
+                <td>{user.email}</td>
                 <td>
-                  <Badge pill className='me-1' color={item.role === 'admin' ? 'light-warning' : 'light-info'}>
-                    {item.role}
+                  <Badge pill className='me-1' color={user.role === 'admin' ? 'light-warning' : 'light-info'}>
+                    {user.role}
                   </Badge>
                 </td>
                 <td>
                   <Edit size={15} className='m-1' />
-                  <Trash size={15} className='m-1' onClick={e => handleDelete(e, item.id)} />
+                  <Trash size={15} className='m-1' onClick={e => handleDelete(e, user.id)} />
                 </td>
               </tr>
             )
@@ -60,11 +60,11 @@ const UsersPage = () => {
       </Table>
       <Form
         open={openFormPanel}
-        addItem={addItem}
-        updateItem={updateItem}
-        deleteItem={deleteItem}
-        selectedItem={selectedItem}
-        setSelectedItem={setSelectedItem}
+        addUser={addUser}
+        updateUser={updateUser}
+        deleteUser={deleteUser}
+        selectedUser={selectedUser}
+        setSelectedUser={setSelectedUser}
         handleFormPanel={handleFormPanel}
       />
     </>

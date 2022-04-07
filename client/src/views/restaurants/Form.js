@@ -1,8 +1,5 @@
 import { useState, Fragment, useEffect } from 'react'
-import _cloneDeep from 'lodash/cloneDeep'
 import { X, Plus, Trash } from 'react-feather'
-import CreatableSelect from 'react-select/creatable'
-import Repeater from '@components/repeater'
 import { Modal, ModalBody, Button, Form, FormGroup, Input, Label } from 'reactstrap'
 import { isObjEmpty, selectThemeColors } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
