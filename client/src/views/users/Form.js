@@ -38,7 +38,7 @@ const FormPanel = props => {
   const defaultValues = {
     email: 'some@email.com',
     password: 'aaaaaaa1',
-    role: 'user'
+    role: roleOptions[0]
   }
 
   // field validations
@@ -60,6 +60,7 @@ const FormPanel = props => {
     handleSubmit,
     formState: { errors }
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(SignupSchema) })
+
   const [errorText, setErrorText] = useState('')
 
   const handleSidebarTitle = () => {
@@ -70,12 +71,19 @@ const FormPanel = props => {
     }
   }
 
-  const onSubmit = data => {
-    if (Object.values(data).every(field => field.length > 0)) {
-      const { email, password, role } = data
+  const onSubmit = formData => {
+    const { email, password, role } = formData
+    const data = {
+      email,
+      password,
+      role: role.value
+    }
 
+    console.log('data', data)
+
+    if (Object.values(data).every(field => field.length > 0)) {
       try {
-        addItem({ email, password, role: role.value })
+        addItem(data)
         handleFormPanel()
       } catch (error) {
         console.log('ERROR')
@@ -264,7 +272,7 @@ const FormPanel = props => {
                   theme={selectThemeColors}
                   className='react-select'
                   classNamePrefix='select'
-                  defaultValue={roleOptions[0]}
+                  // defaultValue={roleOptions[0]}
                   options={roleOptions}
                   isClearable={false}
                   invalid={errors.role && true}
