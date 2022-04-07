@@ -4,6 +4,7 @@ import { X, Plus, Trash } from 'react-feather'
 import CreatableSelect from 'react-select/creatable'
 import Repeater from '@components/repeater'
 import { Modal, ModalBody, Button, Form, FormGroup, Input, Label } from 'reactstrap'
+import Select from 'react-select'
 import { isObjEmpty, selectThemeColors } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
 
@@ -25,6 +26,11 @@ const FormPanel = props => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const roleOptions = [
+    { value: 'user', label: 'user' },
+    { value: 'admin', label: 'admin' }
+  ]
+
   const handleSidebarTitle = () => {
     if (!isObjEmpty(selectedItem)) {
       return 'Edit Item'
@@ -34,8 +40,8 @@ const FormPanel = props => {
   }
 
   const handleResetFields = () => {
-    const { title } = selectedItem
-    setTitle(title)
+    const { email } = selectedItem
+    setEmail(email)
   }
 
   const handleSidebarOpened = () => {
@@ -45,13 +51,15 @@ const FormPanel = props => {
   }
 
   const handleSidebarClosed = () => {
-    setTitle('')
+    setEmail('')
+    setPassword('')
     setSelectedItem({})
   }
 
   const renderFooterButtons = () => {
     const payload = {
-      title
+      email,
+      password
     }
 
     if (!isObjEmpty(selectedItem)) {
@@ -59,7 +67,7 @@ const FormPanel = props => {
         <Fragment>
           <Button.Ripple
             color='primary'
-            disabled={!title.length}
+            disabled={!email.length}
             className='m-1'
             onClick={() => {
               updateItem(selectedItem.id, payload)
@@ -95,7 +103,7 @@ const FormPanel = props => {
         <Fragment>
           <Button
             color='primary'
-            disabled={!title.length}
+            disabled={!email.length}
             className='add-todo-item m-1'
             onClick={() => {
               addItem(payload)
@@ -131,76 +139,33 @@ const FormPanel = props => {
         </ModalHeader>
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
           <FormGroup>
-            <Label for='title' className='form-label'>
-              Title <span className='text-danger'>*</span>
+            <Label for='email' className='form-label'>
+              Email <span className='text-danger'>*</span>
             </Label>
-            <Input
-              id='title'
-              value={title}
-              placeholder='Title'
-              className='new-todo-item-title'
-              onChange={e => setTitle(e.target.value)}
-            />
-          </FormGroup>
-
-          {/* <FormGroup>
-            <Label for='description' className='form-label'>
-              Description
-            </Label>
-            <Input
-              id='description'
-              value={description}
-              placeholder='Description'
-              onChange={e => setDescription(e.target.value)}
-            />
+            <Input id='email' value={email} placeholder='email' onChange={e => setEmail(e.target.value)} />
           </FormGroup>
 
           <FormGroup>
-            <Label for='details' className='form-label'>
-              Details
+            <Label for='password' className='form-label'>
+              Password <span className='text-danger'>*</span>
             </Label>
-            <Input
-              id='details'
-              value={details}
-              placeholder='Details'
-              type='textarea'
-              rows={6}
-              onChange={e => setDetails(e.target.value)}
-            />
+            <Input id='password' value={password} placeholder='password' onChange={e => setPassword(e.target.value)} />
           </FormGroup>
 
           <FormGroup>
-            <Label for='items' className='form-label'>
-              Words / Phrases (<i>one per line</i>)
+            <Label for='role' className='form-label'>
+              Role
             </Label>
-            <Input
-              id='items'
-              value={items}
-              placeholder='Word list'
-              type='textarea'
-              rows={6}
-              onChange={e => setItems(e.target.value)}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label for='tags' className='form-label'>
-              Tags
-            </Label>
-            <CreatableSelect
-              isMulti
-              value={tags}
-              id='tags'
-              isClearable={false}
-              options={tagOptions}
+            <Select
+              id='role'
+              theme={selectThemeColors}
               className='react-select'
               classNamePrefix='select'
-              theme={selectThemeColors}
-              onChange={(data, actionMeta) => {
-                setTags(data !== null ? [...data] : [])
-              }}
+              defaultValue={roleOptions[0]}
+              options={roleOptions}
+              isClearable={false}
             />
-          </FormGroup> */}
+          </FormGroup>
 
           <FormGroup className='my-1'>{renderFooterButtons()}</FormGroup>
         </ModalBody>
