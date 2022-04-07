@@ -50,10 +50,22 @@ const deleteRestaurant = {
   }),
 };
 
+const submitReview = {
+  params: Joi.object().keys({
+    restaurantId: Joi.string().custom(objectId),
+  }),
+  body: Joi.object().keys({
+    rating: Joi.number().integer().min(1).max(5).required(),
+    comment: Joi.string().required(),
+    dateVisited: Joi.date().required(),
+  }),
+};
+
 module.exports = {
   createRestaurant,
   getRestaurants,
   getRestaurant,
   updateRestaurant,
   deleteRestaurant,
+  submitReview,
 };

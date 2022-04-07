@@ -35,10 +35,16 @@ const deleteRestaurant = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const submitReview = catchAsync(async (req, res) => {
+  const review = await restaurantService.submitReview(req.params.restaurantId, req.body);
+  res.send(review);
+});
+
 module.exports = {
   createRestaurant,
   getRestaurants,
   getRestaurant,
   updateRestaurant,
   deleteRestaurant,
+  submitReview,
 };

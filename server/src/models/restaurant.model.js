@@ -8,6 +8,26 @@ const restaurantSchema = mongoose.Schema(
       required: true,
       trim: true,
     },
+    reviews: {
+      type: [
+        {
+          rating: {
+            type: Number,
+            required: true,
+          },
+          comment: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+          dateVisited: {
+            type: Date,
+            required: true,
+          },
+          // _id: false,
+        },
+      ],
+    },
     // description: {
     //   type: String,
     //   required: false,
