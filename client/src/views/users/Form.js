@@ -1,8 +1,5 @@
 import { useState, Fragment, useEffect } from 'react'
-import _cloneDeep from 'lodash/cloneDeep'
 import { X, Plus, Trash } from 'react-feather'
-import CreatableSelect from 'react-select/creatable'
-import Repeater from '@components/repeater'
 import { Modal, ModalBody, Button, Form, FormGroup, Input, Label, FormFeedback, Alert } from 'reactstrap'
 import Select from 'react-select'
 import { isObjEmpty, selectThemeColors } from '@utils'
@@ -25,19 +22,14 @@ const ModalHeader = props => {
 }
 
 const FormPanel = props => {
-  const { open, handleFormPanel, selectedUser, setSelectedUser, addUser, deleteUser, updateUser } = props
-
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
   const roleOptions = [
     { value: 'user', label: 'user' },
     { value: 'admin', label: 'admin' }
   ]
 
   const defaultValues = {
-    email: 'some@email.com',
-    password: 'aaaaaaa1',
+    email: '',
+    password: '',
     role: roleOptions[0]
   }
 
@@ -61,7 +53,13 @@ const FormPanel = props => {
     formState: { errors }
   } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(SignupSchema) })
 
-  const [errorText, setErrorText] = useState('')
+  const [errorText, setErrorText] = useState('') // TODO:
+
+  const { open, handleFormPanel, selectedUser, setSelectedUser, addUser, deleteUser, updateUser } = props
+
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  // const role  TODO:
 
   const handleSidebarTitle = () => {
     if (!isObjEmpty(selectedUser)) {
@@ -71,7 +69,7 @@ const FormPanel = props => {
     }
   }
 
-  const onSubmit = formData => {
+  const onSubmit = async formData => {
     const { email, password, role } = formData
     const data = {
       email,
@@ -80,8 +78,12 @@ const FormPanel = props => {
     }
     if (Object.values(data).every(field => field.length > 0)) {
       try {
-        addUser(data)
-        handleFormPanel()
+        const res = await addUser(data)
+        if (!res) {
+          handleFormPanel()
+        } else {
+          setErrorText(res)
+        }
       } catch (error) {
         console.log('ERROR')
         console.log(error)
@@ -129,6 +131,7 @@ const FormPanel = props => {
   const handleResetFields = () => {
     const { email } = selectedUser
     setEmail(email)
+    setPassword('')
   }
 
   const handleSidebarOpened = () => {
@@ -154,11 +157,11 @@ const FormPanel = props => {
         <Fragment>
           <Button.Ripple
             color='primary'
-            disabled={!email.length}
+            // disabled={!email.length}
             className='m-1'
             onClick={() => {
-              // updateUser(selectedUser.id, payload)
-              // handleFormPanel()
+              updateUser(selectedUser.id, payload)
+              handleFormPanel()
             }}
           >
             Update
@@ -283,15 +286,6 @@ const FormPanel = props => {
           {errorText && (
             <Alert color='danger'>
               <div className='alert-body'>
-                <span>{errorText}</span>
-              </div>
-            </Alert>
-          )}
-
-          {errorText && (
-            <Alert color='danger'>
-              <div className='alert-body'>
-                {/* <span className='fw-bold'>Error</span> */}
                 <span>{errorText}</span>
               </div>
             </Alert>

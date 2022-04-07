@@ -35,7 +35,8 @@ export const UserState = props => {
       const res = await axios.post('/v1/users', user, config)
       dispatch({ type: ADD_USER, payload: res.data })
     } catch (err) {
-      console.error('Add error', err)
+      console.log('Add error', err)
+      return err.response.data.message
     }
   }
 
