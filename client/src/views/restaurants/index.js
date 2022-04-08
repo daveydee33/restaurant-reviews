@@ -38,6 +38,8 @@ const UsersPage = () => {
     deleteRestaurant(id)
   }
 
+  restaurants.sort((a, b) => b.reviewAvg - a.reviewAvg)
+
   return (
     <>
       {/* <BreadCrumbs title='Restaurants' data={[]} /> */}
