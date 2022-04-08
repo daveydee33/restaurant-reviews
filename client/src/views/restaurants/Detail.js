@@ -1,6 +1,19 @@
 import { useState, useContext, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Card, CardHeader, CardBody, CardTitle, CardText, Form, FormGroup, Label, Input, Button } from 'reactstrap'
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  CardText,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button,
+  Col,
+  Row
+} from 'reactstrap'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
 import StarRatings from 'react-star-ratings'
 import Flatpickr from 'react-flatpickr'
@@ -43,8 +56,6 @@ const SecondPage = () => {
       <Card className='text-center mb-3'>
         <CardBody>
           <h1>{current?.title}</h1>
-          <CardText>Total Reviews: {current?.reviews?.length || 0}</CardText>
-          <CardText>Average Score: {current?.reviewAvg?.toFixed(1)}</CardText>
           <StarRatings
             rating={current?.reviewAvg || 0}
             starRatedColor='gold'
@@ -52,6 +63,24 @@ const SecondPage = () => {
             starSpacing='0'
             className='m-5'
           />
+          <Row className='mt-1'>
+            <Col>
+              <CardText>Total Reviews: ___</CardText>
+            </Col>
+            <Col>
+              <CardText>Highest Review: ___</CardText>
+            </Col>
+            <Col>
+              <CardText>Lowest Review: ___</CardText>
+            </Col>
+            <Col>
+              <CardText>Most Recent: ___</CardText>
+            </Col>
+
+            <Col>
+              <CardText>Average Score: {current?.reviewAvg?.toFixed(1)}</CardText>
+            </Col>
+          </Row>
         </CardBody>
       </Card>
 
