@@ -107,7 +107,6 @@ export const RestaurantState = props => {
         'Content-Type': 'application/json'
       }
     }
-    console.log('what', id, payload)
     try {
       const res = await axios.post(`/v1/restaurants/${id}/reviews`, payload, config)
       dispatch({ type: SUBMIT_REVIEW, payload: res.data })
