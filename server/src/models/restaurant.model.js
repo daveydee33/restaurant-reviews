@@ -24,6 +24,11 @@ const restaurantSchema = mongoose.Schema(
             type: Date,
             required: true,
           },
+          reviewDate: {
+            type: Date,
+            default: Date.now,
+            required: true,
+          },
         },
       ],
     },
@@ -37,6 +42,22 @@ const restaurantSchema = mongoose.Schema(
 restaurantSchema.virtual('reviewAvg').get(function () {
   const reviewTotal = this.reviews.reduce((sum, cur) => sum + cur.rating, 0);
   return reviewTotal / this.reviews.length;
+});
+
+restaurantSchema.virtual('reviewHigh').get(function () {
+  if (!this.reviews.length) return null;
+  const max = this.reviews.reduce((a, b) => (a.rating > b.rating ? a : b), 0).rating;
+  return max;
+});
+
+restaurantSchema.virtual('reviewLow').get(function () {
+  if (!this.reviews.length) return null;
+  const min = this.reviews.reduce((a, b) => (a.rating < b.rating ? a : b), 0).rating;
+  return min;
+});
+
+restaurantSchema.virtual('reviewCount').get(function () {
+  return this.reviews.length || 0;
 });
 
 // add plugin that converts mongoose to json
