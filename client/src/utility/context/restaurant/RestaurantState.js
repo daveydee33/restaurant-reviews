@@ -115,6 +115,16 @@ export const RestaurantState = props => {
     }
   }
 
+  // Delete Review
+  const deleteReview = async (restaurantId, reviewId) => {
+    try {
+      const res = await axios.delete(`/v1/restaurants/${restaurantId}/reviews/${reviewId}`)
+      dispatch({ type: DELETE_ITEM, payload: res.data })
+    } catch (err) {
+      console.error('Delete review error')
+    }
+  }
+
   return (
     <restaurantContext.Provider
       value={{
@@ -129,7 +139,8 @@ export const RestaurantState = props => {
         setCurrent,
         clearCurrent,
         resetToDefault,
-        submitReview
+        submitReview,
+        deleteReview
       }}
     >
       {props.children}
