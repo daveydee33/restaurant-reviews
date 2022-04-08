@@ -71,20 +71,24 @@ const SecondPage = () => {
           />
           <Row className='mt-1'>
             <Col>
-              <CardText>Total Reviews: {current?.reviewCount}</CardText>
+              Total Reviews:
+              <div>{current?.reviewCount}</div>
             </Col>
             <Col>
-              <CardText>Highest Review: {current?.reviewMax}</CardText>
+              Highest Review:
+              <div>{current?.reviewMax}</div>
             </Col>
             <Col>
-              <CardText>Lowest Review: {current?.reviewMin}</CardText>
+              Lowest Review:
+              <div>{current?.reviewMin}</div>
             </Col>
             <Col>
-              <CardText>Most Recent: ___</CardText>
+              Most Recent:
+              <div>{current?.reviews?.sort((a, b) => a.reviewDate - b.reviewDate)[0]?.rating}</div>
             </Col>
-
             <Col>
-              <CardText>Average Score: {current?.reviewAvg?.toFixed(1)}</CardText>
+              Average Score:
+              <div>{current?.reviewAvg?.toFixed(1)}</div>
             </Col>
           </Row>
         </CardBody>
