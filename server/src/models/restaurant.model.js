@@ -44,13 +44,13 @@ restaurantSchema.virtual('reviewAvg').get(function () {
   return reviewTotal / this.reviews.length;
 });
 
-restaurantSchema.virtual('reviewHigh').get(function () {
+restaurantSchema.virtual('reviewMax').get(function () {
   if (!this.reviews.length) return null;
   const max = this.reviews.reduce((a, b) => (a.rating > b.rating ? a : b), 0).rating;
   return max;
 });
 
-restaurantSchema.virtual('reviewLow').get(function () {
+restaurantSchema.virtual('reviewMin').get(function () {
   if (!this.reviews.length) return null;
   const min = this.reviews.reduce((a, b) => (a.rating < b.rating ? a : b), 0).rating;
   return min;

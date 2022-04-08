@@ -65,13 +65,13 @@ const SecondPage = () => {
           />
           <Row className='mt-1'>
             <Col>
-              <CardText>Total Reviews: ___</CardText>
+              <CardText>Total Reviews: {current?.reviewCount}</CardText>
             </Col>
             <Col>
-              <CardText>Highest Review: ___</CardText>
+              <CardText>Highest Review: {current?.reviewMax}</CardText>
             </Col>
             <Col>
-              <CardText>Lowest Review: ___</CardText>
+              <CardText>Lowest Review: {current?.reviewMin}</CardText>
             </Col>
             <Col>
               <CardText>Most Recent: ___</CardText>
