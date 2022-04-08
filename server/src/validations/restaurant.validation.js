@@ -61,6 +61,13 @@ const submitReview = {
   }),
 };
 
+const deleteReview = {
+  params: Joi.object().keys({
+    restaurantId: Joi.string().custom(objectId),
+    reviewId: Joi.string().custom(objectId),
+  }),
+};
+
 module.exports = {
   createRestaurant,
   getRestaurants,
@@ -68,4 +75,5 @@ module.exports = {
   updateRestaurant,
   deleteRestaurant,
   submitReview,
+  deleteReview,
 };

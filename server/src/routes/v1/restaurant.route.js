@@ -21,6 +21,11 @@ router
   .route('/:restaurantId/reviews')
   .post(auth('submitReview'), validate(restaurantValidation.submitReview), restaurantController.submitReview);
 
+router
+  .route('/:restaurantId/reviews/:reviewId')
+  .delete(auth('manageReview'), validate(restaurantValidation.deleteReview), restaurantController.deleteReview);
+// .put(auth('manageReview'), validate(restaurantValidation.updateReview), restaurantController.updateReview);
+
 module.exports = router;
 
 /**

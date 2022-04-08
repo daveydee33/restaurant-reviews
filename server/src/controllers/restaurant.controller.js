@@ -40,6 +40,12 @@ const submitReview = catchAsync(async (req, res) => {
   res.send(review);
 });
 
+const deleteReview = catchAsync(async (req, res) => {
+  const { restaurantId, reviewId } = req.params;
+  const restaurant = await restaurantService.deleteReview(restaurantId, reviewId);
+  res.send(restaurant);
+});
+
 module.exports = {
   createRestaurant,
   getRestaurants,
@@ -47,4 +53,5 @@ module.exports = {
   updateRestaurant,
   deleteRestaurant,
   submitReview,
+  deleteReview,
 };
