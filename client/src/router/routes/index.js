@@ -9,6 +9,7 @@ import LayoutWrapper from '@src/@core/layouts/components/layout-wrapper'
 
 // ** Route Components
 import PublicRoute from '@components/routes/PublicRoute'
+import PrivateRoute from '@components/routes/PrivateRoute'
 
 // ** Utils
 import { isObjEmpty } from '@utils'
@@ -42,17 +43,20 @@ const Routes = [
     index: true,
     element: <Navigate replace to={DefaultRoute} />
   },
-  {
-    path: '/home',
-    element: <Home />
-  },
-  {
-    path: '/second-page',
-    element: <SecondPage />
-  },
+  // {
+  //   path: '/home',
+  //   element: <Home />
+  // },
+  // {
+  //   path: '/second-page',
+  //   element: <SecondPage />
+  // },
   {
     path: '/users',
-    element: <Users />
+    element: <Users />,
+    meta: {
+      restricted: true
+    }
   },
   {
     path: '/restaurants',
@@ -76,13 +80,13 @@ const Routes = [
       layout: 'blank'
     }
   },
-  {
-    path: '/forgot-password',
-    element: <ForgotPassword />,
-    meta: {
-      layout: 'blank'
-    }
-  },
+  // {
+  //   path: '/forgot-password',
+  //   element: <ForgotPassword />,
+  //   meta: {
+  //     layout: 'blank'
+  //   }
+  // },
   {
     path: '/error',
     element: <Error />,
@@ -114,11 +118,12 @@ const MergeLayoutRoutes = (layout, defaultLayout) => {
         (route.meta && route.meta.layout && route.meta.layout === layout) ||
         ((route.meta === undefined || route.meta.layout === undefined) && defaultLayout === layout)
       ) {
-        const RouteTag = PublicRoute
+        let RouteTag = PrivateRoute
 
         // ** Check for public or private route
         if (route.meta) {
           route.meta.layout === 'blank' ? (isBlank = true) : (isBlank = false)
+          RouteTag = route.meta.publicRoute ? PublicRoute : PrivateRoute
         }
         if (route.element) {
           const Wrapper =
