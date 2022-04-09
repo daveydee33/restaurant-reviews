@@ -1,4 +1,4 @@
-import useJwt from '@src/@core/auth/jwt/useJwt'
+import useJwt from '@src/auth/jwt/useJwt'
 
 /**
  * Return if user is logged in
