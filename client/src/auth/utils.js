@@ -12,7 +12,7 @@ export const isUserLoggedIn = () => {
 
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
 
-export const isAdmin = () => getUserData().role === 'admin'
+export const isAdmin = () => getUserData()?.role === 'admin'
 
 /**
  * This function is used for demo purpose route navigation
