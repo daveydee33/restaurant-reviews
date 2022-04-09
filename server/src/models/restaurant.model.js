@@ -19,6 +19,7 @@ const restaurantSchema = mongoose.Schema(
             type: String,
             required: true,
             trim: true,
+            maxlength: 250,
           },
           dateVisited: {
             type: Date,

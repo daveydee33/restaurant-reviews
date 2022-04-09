@@ -56,7 +56,7 @@ const submitReview = {
   }),
   body: Joi.object().keys({
     rating: Joi.number().integer().min(1).max(5).required(),
-    comment: Joi.string().required(),
+    comment: Joi.string().max(250).required(),
     dateVisited: Joi.date().required(),
   }),
 };
