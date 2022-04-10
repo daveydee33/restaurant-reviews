@@ -9,7 +9,8 @@ import {
   SET_CURRENT,
   CLEAR_CURRENT,
   RESET_TO_DEFAULT,
-  SUBMIT_REVIEW
+  SUBMIT_REVIEW,
+  UPDATE_REVIEW
 } from './types'
 import axios from 'axios'
 
@@ -79,7 +80,8 @@ export const RestaurantState = props => {
     try {
       const res = await axios.delete(`/v1/restaurants/${id}`)
       console.log(`Deleting restaurant: ${id}`, res.data)
-      dispatch({ type: DELETE_ITEM, payload: id })
+      await dispatch({ type: DELETE_ITEM, payload: id })
+      getRestaurants(restaurantId)
     } catch (err) {
       console.error('Delete Restaurant error')
     }
@@ -110,8 +112,25 @@ export const RestaurantState = props => {
     try {
       const res = await axios.post(`/v1/restaurants/${id}/reviews`, payload, config)
       dispatch({ type: SUBMIT_REVIEW, payload: res.data })
+      getRestaurant(id)
     } catch (err) {
       console.error('Submit review error', err)
+    }
+  }
+
+  // Update Review
+  const updateReview = async (restaurantId, reviewId, payload) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    try {
+      const res = await axios.put(`/v1/restaurants/${restaurantId}/reviews/${reviewId}`, payload, config)
+      await dispatch({ type: UPDATE_REVIEW, payload: res.data })
+      getRestaurant(restaurantId)
+    } catch (err) {
+      console.error('Update review error', err)
     }
   }
 
@@ -119,7 +138,8 @@ export const RestaurantState = props => {
   const deleteReview = async (restaurantId, reviewId) => {
     try {
       const res = await axios.delete(`/v1/restaurants/${restaurantId}/reviews/${reviewId}`)
-      dispatch({ type: DELETE_ITEM, payload: res.data })
+      await dispatch({ type: DELETE_ITEM, payload: res.data })
+      getRestaurant(restaurantId)
     } catch (err) {
       console.error('Delete review error')
     }
@@ -140,6 +160,7 @@ export const RestaurantState = props => {
         clearCurrent,
         resetToDefault,
         submitReview,
+        updateReview,
         deleteReview
       }}
     >
