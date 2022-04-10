@@ -23,8 +23,8 @@ router
 
 router
   .route('/:restaurantId/reviews/:reviewId')
+  .put(auth('manageReview'), validate(restaurantValidation.updateReview), restaurantController.updateReview)
   .delete(auth('manageReview'), validate(restaurantValidation.deleteReview), restaurantController.deleteReview);
-// .put(auth('manageReview'), validate(restaurantValidation.updateReview), restaurantController.updateReview);
 
 module.exports = router;
 

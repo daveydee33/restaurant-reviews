@@ -15,18 +15,22 @@ import {
   Row
 } from 'reactstrap'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
+import ReviewForm from './ReviewForm'
 import StarRatings from 'react-star-ratings'
 import Flatpickr from 'react-flatpickr'
 import BreadCrumbs from '@components/breadcrumbs'
+import { isAdmin } from '../../auth/utils'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const SecondPage = () => {
   const params = useParams()
   const { id } = params
-  const { getRestaurant, current, submitReview, deleteReview } = useContext(restaurantContext)
+  const { getRestaurant, current, submitReview, deleteReview, updateReview } = useContext(restaurantContext)
   const [rating, setRating] = useState()
   const [comment, setComment] = useState()
   const [dateVisited, setDateVisited] = useState()
+  const [selectedReview, setSelectedReview] = useState({})
+  const [openFormPanel, setOpenFormPanel] = useState(false)
 
   useEffect(async () => {
     getRestaurant(id)
@@ -43,7 +47,17 @@ const SecondPage = () => {
       getRestaurant(id)
     } catch (error) {
       // TODO:
+      console.error('Error submitting review')
+      console.error(error)
     }
+  }
+
+  const handleFormPanel = () => setOpenFormPanel(!openFormPanel)
+
+  const handleSelectReview = (e, reviewData) => {
+    e.stopPropagation()
+    setSelectedReview(reviewData)
+    handleFormPanel()
   }
 
   const handleDelete = async (e, restaurantId, reviewId) => {
@@ -162,17 +176,42 @@ const SecondPage = () => {
               {/* <CardText>{new Date(review.dateVisited).toDateString()}</CardText> */}
               <CardText>{new Date(review.dateVisited).toISOString().split('T')[0]}</CardText>
               <CardText>
-                <Button color='flat-warning' size='sm'>
-                  Edit
-                </Button>
-                <Button color='flat-danger' size='sm' onClick={e => handleDelete(e, current.id, review._id)}>
-                  Delete
-                </Button>
+                {isAdmin() && (
+                  <>
+                    <Button
+                      color='flat-warning'
+                      size='sm'
+                      onClick={e =>
+                        // eslint-disable-next-line implicit-arrow-linebreak
+                        handleSelectReview(e, {
+                          restaurantId: current.id,
+                          reviewId: review._id,
+                          rating: review.rating,
+                          comment: review.comment,
+                          dateVisited: review.dateVisited
+                        })
+                      }
+                    >
+                      Edit
+                    </Button>
+                    <Button color='flat-danger' size='sm' onClick={e => handleDelete(e, current.id, review._id)}>
+                      Delete
+                    </Button>
+                  </>
+                )}
               </CardText>
             </CardBody>
           </Card>
         )
       })}
+      <ReviewForm
+        open={openFormPanel}
+        handleFormPanel={handleFormPanel}
+        selectedReview={selectedReview}
+        setSelectedReview={setSelectedReview}
+        updateReview={updateReview}
+        deleteReview={deleteReview}
+      />
     </>
   )
 }

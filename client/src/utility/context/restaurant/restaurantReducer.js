@@ -8,6 +8,7 @@ import {
   CLEAR_CURRENT,
   RESET_TO_DEFAULT,
   SUBMIT_REVIEW,
+  UPDATE_REVIEW,
   DELETE_REVIEW
 } from './types'
 
@@ -61,12 +62,17 @@ export default (state, action) => {
     case SUBMIT_REVIEW:
       return {
         ...state
-        // TODO: add review? or just fetch again?
+        // TODO: or just fetch again
+      }
+    case UPDATE_REVIEW:
+      return {
+        ...state
+        // TODO: or just fetch again
       }
     case DELETE_REVIEW:
       return {
         ...state
-        // TODO: delete review? or just fetch again?
+        // TODO: or just fetch again
       }
 
     default:

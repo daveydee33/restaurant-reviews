@@ -83,6 +83,36 @@ const submitReview = async (id, review) => {
 };
 
 /**
+ * Update review to restaurant by restaurant id and review id
+ * @param {ObjectId} restaurantId
+ * @param {ObjectId} reviewId
+ * @returns {Promise<Review>}
+ */
+const updateReview = async (restaurantId, reviewId, payload) => {
+  const restaurant = await getRestaurantById(restaurantId);
+  if (!restaurant) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Restaurant not found');
+  }
+  // there might be a more mongoose-ish way to do this
+  if (restaurant.reviews.filter((rev) => rev.id === reviewId).length < 1) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Review not found');
+  }
+  let modifiedReviews = [];
+  modifiedReviews = restaurant.reviews.map((rev) => {
+    if (rev._id.toString() === reviewId) {
+      return {
+        ...rev._doc,
+        ...payload,
+      };
+    }
+    return rev;
+  });
+  Object.assign(restaurant, { reviews: modifiedReviews });
+  await restaurant.save();
+  return restaurant;
+};
+
+/**
  * Delete review from restaurant
  * @param {ObjectId} restaurantId
  * @param {ObjectId} reviewId
@@ -93,12 +123,10 @@ const deleteReview = async (restaurantId, reviewId) => {
   if (!restaurant) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Restaurant not found');
   }
-
   // there might be a more mongoose-ish way to do this
   if (restaurant.reviews.filter((rev) => rev.id === reviewId).length < 1) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Review not found');
   }
-
   await restaurant.reviews.pull({ _id: reviewId });
   await restaurant.save();
   return restaurant;
@@ -111,5 +139,6 @@ module.exports = {
   updateRestaurantById,
   deleteRestaurantById,
   submitReview,
+  updateReview,
   deleteReview,
 };
