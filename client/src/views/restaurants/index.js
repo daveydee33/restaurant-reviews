@@ -1,11 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
-import { Edit, Trash } from 'react-feather'
+import { Edit, Trash, Eye } from 'react-feather'
 import { Table, Button } from 'reactstrap'
 import Form from './Form'
 import { useNavigate } from 'react-router-dom'
 import StarRatings from 'react-star-ratings'
 import BreadCrumbs from '@components/breadcrumbs'
+import { isAdmin } from '../../auth/utils'
 
 const UsersPage = () => {
   const navigate = useNavigate()
@@ -21,7 +22,8 @@ const UsersPage = () => {
 
   const handleFormPanel = () => setOpenFormPanel(!openFormPanel)
 
-  const handleRestaurantClick = restaurant => {
+  const handleRestaurantClick = (e, restaurant) => {
+    e.stopPropagation()
     // setSelectedRestaurant(restaurant)
     // handleFormPanel()
     navigate(`/restaurants/${restaurant.id}`)
@@ -44,11 +46,11 @@ const UsersPage = () => {
     <>
       {/* <BreadCrumbs title='Restaurants' data={[]} /> */}
       <h1 className='my-1'>Restaurants</h1>
-
-      <Button color='primary' className='m-1' onClick={handleFormPanel}>
-        Add Restaurant
-      </Button>
-
+      {isAdmin() && (
+        <Button color='primary' className='m-1' onClick={handleFormPanel}>
+          Add Restaurant
+        </Button>
+      )}
       <Table hover responsive>
         <thead>
           <tr>
@@ -62,7 +64,7 @@ const UsersPage = () => {
         <tbody>
           {restaurants.map(restaurant => {
             return (
-              <tr key={restaurant.id} onClick={() => handleRestaurantClick(restaurant)}>
+              <tr key={restaurant.id} onClick={e => handleRestaurantClick(e, restaurant)}>
                 <td>{restaurant.title}</td>
                 <td>
                   <StarRatings
@@ -76,8 +78,13 @@ const UsersPage = () => {
                 <td>{restaurant?.reviewAvg?.toFixed(1)}</td>
                 <td>{restaurant?.reviews?.length}</td>
                 <td>
-                  <Edit size={15} className='m-1' onClick={e => handleEditClick(e, restaurant)} />
-                  <Trash size={15} className='m-1' onClick={e => handleDelete(e, restaurant.id)} />
+                  <Eye size={15} className='m-1' onClick={e => handleRestaurantClick(e, restaurant)} />
+                  {isAdmin() && (
+                    <>
+                      <Edit size={15} className='m-1' onClick={e => handleEditClick(e, restaurant)} />
+                      <Trash size={15} className='m-1' onClick={e => handleDelete(e, restaurant.id)} />
+                    </>
+                  )}
                 </td>
               </tr>
             )

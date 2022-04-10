@@ -1,4 +1,4 @@
-import useJwt from '@src/@core/auth/jwt/useJwt'
+import useJwt from '@src/auth/jwt/useJwt'
 
 /**
  * Return if user is logged in
@@ -11,6 +11,8 @@ export const isUserLoggedIn = () => {
 }
 
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
+
+export const isAdmin = () => getUserData()?.role === 'admin'
 
 /**
  * This function is used for demo purpose route navigation

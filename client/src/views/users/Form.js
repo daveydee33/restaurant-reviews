@@ -39,14 +39,14 @@ const FormPanel = props => {
   }
 
   const handleSubmit = async () => {
-    const data = {
+    const payload = {
       email,
       password,
-      role
+      role: role?.value
     }
 
     try {
-      const res = await addUser(data)
+      const res = await addUser(payload)
       if (!res) {
         handleFormPanel()
       } else {
@@ -160,45 +160,39 @@ const FormPanel = props => {
           {handleSidebarTitle()}
         </ModalHeader>
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
-          <FormGroup>
-            <Label for='email' className='form-label'>
-              Email <span className='text-danger'>*</span>
-            </Label>
-            <Input id='email' value={email} placeholder='Title' onChange={e => setEmail(e.target.value)} />
-          </FormGroup>
+          <Label for='email' className='form-label'>
+            Email <span className='text-danger'>*</span>
+          </Label>
+          <Input id='email' value={email} placeholder='Title' onChange={e => setEmail(e.target.value)} />
 
-          <FormGroup>
-            <Label for='password' className='form-label'>
-              Password
-            </Label>
-            <Input
-              id='password'
-              value={password}
-              placeholder='password'
-              onChange={e => setPassword(e.target.value)}
-              type='password'
-            />
-          </FormGroup>
+          <Label for='password' className='form-label mt-2'>
+            Password
+          </Label>
+          <Input
+            id='password'
+            value={password}
+            placeholder='password'
+            onChange={e => setPassword(e.target.value)}
+            type='password'
+          />
 
-          <FormGroup>
-            <Label for='role' className='form-label'>
-              Role
-            </Label>
-            <Select
-              id='role'
-              theme={selectThemeColors}
-              className='react-select'
-              classNamePrefix='select'
-              // defaultValue={roleOptions[0]}
-              value={role}
-              options={roleOptions}
-              isClearable={false}
-              onChange={obj => setRole(obj)}
-            />
-          </FormGroup>
+          <Label for='role' className='form-label  mt-2'>
+            Role
+          </Label>
+          <Select
+            id='role'
+            theme={selectThemeColors}
+            className='react-select'
+            classNamePrefix='select'
+            // defaultValue={roleOptions[0]}
+            value={role}
+            options={roleOptions}
+            isClearable={false}
+            onChange={obj => setRole(obj)}
+          />
 
           {errorText && (
-            <Alert color='danger'>
+            <Alert color='danger' className='mt-2'>
               <div className='alert-body'>
                 <span>{errorText}</span>
               </div>
