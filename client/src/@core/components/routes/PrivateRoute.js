@@ -21,17 +21,18 @@ const PrivateRoute = ({ children, route }) => {
       restrictedRoute = route.meta.restricted
     }
     if (!user) {
-      return <Navigate to='/login' />
+      return <Navigate to='/auth/not-auth' />
     }
-    if (user && restrictedRoute) {
-      return <Navigate to='/' />
+    // if (user && restrictedRoute) {
+    //   return <Navigate to='/' />
+    // }
+
+    if (user && restrictedRoute && user.role !== 'admin') {
+      return <Navigate to='/auth/not-auth' />
     }
-    if (user && restrictedRoute && user.role === 'client') {
-      return <Navigate to='/access-control' />
-    }
-    if (user && !ability.can(action || 'read', resource)) {
-      return <Navigate to='/misc/not-authorized' replace />
-    }
+    // if (user && !ability.can(action || 'read', resource)) {
+    //   return <Navigate to='/misc/not-authorized' replace />
+    // }
   }
 
   return <Suspense fallback={null}>{children}</Suspense>

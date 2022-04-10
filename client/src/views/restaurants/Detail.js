@@ -23,7 +23,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 const SecondPage = () => {
   const params = useParams()
   const { id } = params
-  const { getRestaurant, current, submitReview } = useContext(restaurantContext)
+  const { getRestaurant, current, submitReview, deleteReview } = useContext(restaurantContext)
   const [rating, setRating] = useState()
   const [comment, setComment] = useState()
   const [dateVisited, setDateVisited] = useState()
@@ -46,6 +46,12 @@ const SecondPage = () => {
     }
   }
 
+  const handleDelete = async (e, restaurantId, reviewId) => {
+    e.preventDefault()
+    await deleteReview(restaurantId, reviewId)
+    getRestaurant(id)
+  }
+
   return (
     <>
       <h1 className='my-1'>Restaurant Details</h1>
@@ -65,20 +71,24 @@ const SecondPage = () => {
           />
           <Row className='mt-1'>
             <Col>
-              <CardText>Total Reviews: {current?.reviewCount}</CardText>
+              Total Reviews:
+              <div>{current?.reviewCount}</div>
             </Col>
             <Col>
-              <CardText>Highest Review: {current?.reviewMax}</CardText>
+              Highest Review:
+              <div>{current?.reviewMax}</div>
             </Col>
             <Col>
-              <CardText>Lowest Review: {current?.reviewMin}</CardText>
+              Lowest Review:
+              <div>{current?.reviewMin}</div>
             </Col>
             <Col>
-              <CardText>Most Recent: ___</CardText>
+              Most Recent:
+              <div>{current?.reviews?.sort((a, b) => a.reviewDate - b.reviewDate)[0]?.rating}</div>
             </Col>
-
             <Col>
-              <CardText>Average Score: {current?.reviewAvg?.toFixed(1)}</CardText>
+              Average Score:
+              <div>{current?.reviewAvg?.toFixed(1)}</div>
             </Col>
           </Row>
         </CardBody>
@@ -138,6 +148,7 @@ const SecondPage = () => {
         </CardBody>
       </Card>
 
+      {/* <span className='text-right'>Total Reviews: {current?.reviews?.length}</span> */}
       {current?.reviews.map(review => {
         return (
           <Card key={review._id}>
@@ -150,6 +161,14 @@ const SecondPage = () => {
               <CardText>{review.comment}</CardText>
               {/* <CardText>{new Date(review.dateVisited).toDateString()}</CardText> */}
               <CardText>{new Date(review.dateVisited).toISOString().split('T')[0]}</CardText>
+              <CardText>
+                <Button color='flat-warning' size='sm'>
+                  Edit
+                </Button>
+                <Button color='flat-danger' size='sm' onClick={e => handleDelete(e, current.id, review._id)}>
+                  Delete
+                </Button>
+              </CardText>
             </CardBody>
           </Card>
         )
