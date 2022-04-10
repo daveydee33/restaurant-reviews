@@ -18,6 +18,7 @@ import { restaurantContext } from '../../utility/context/restaurant/RestaurantSt
 import StarRatings from 'react-star-ratings'
 import Flatpickr from 'react-flatpickr'
 import BreadCrumbs from '@components/breadcrumbs'
+import { isAdmin } from '../../auth/utils'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const SecondPage = () => {
@@ -43,6 +44,8 @@ const SecondPage = () => {
       getRestaurant(id)
     } catch (error) {
       // TODO:
+      console.error('Error submitting review')
+      console.error(error)
     }
   }
 
@@ -162,12 +165,16 @@ const SecondPage = () => {
               {/* <CardText>{new Date(review.dateVisited).toDateString()}</CardText> */}
               <CardText>{new Date(review.dateVisited).toISOString().split('T')[0]}</CardText>
               <CardText>
-                <Button color='flat-warning' size='sm'>
-                  Edit
-                </Button>
-                <Button color='flat-danger' size='sm' onClick={e => handleDelete(e, current.id, review._id)}>
-                  Delete
-                </Button>
+                {isAdmin() && (
+                  <>
+                    <Button color='flat-warning' size='sm'>
+                      Edit
+                    </Button>
+                    <Button color='flat-danger' size='sm' onClick={e => handleDelete(e, current.id, review._id)}>
+                      Delete
+                    </Button>
+                  </>
+                )}
               </CardText>
             </CardBody>
           </Card>
