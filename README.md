@@ -19,5 +19,7 @@ npm install
 npm run install-client
 npm run install-server
 
+cp server/.env.example server/.env
+
 npm run dev
 ```
