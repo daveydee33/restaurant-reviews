@@ -1,28 +1,37 @@
 # Restaurant Reviews
 
-This requires Node v 14, as one of the client packages doesn't yet support v16.
+This requires Node v14.  (One of the React libraries doen't yet support Node 16, so it requires Node 14)
 
 
 ## Setup and Run
 
 1.  Use Node v14, to install the dependencies.
-2.  Run MongoDB locally, and/or configure a hostname, port, and db name in `server/.env`
-3.  Run the `dev` script in the root directory, and this will start:
-    1.  client on port 3000
-    2.  server on port 4000
+2.  Run MongoDB locally, and/or configure a hostname, port, and db name in `server/.env` file
+3.  Run the commands below one to install the dependencies first.  Then use `npm run dev` from the root folder to start both the server and client apps together)
 
+## Setup and Install
+
+NOTE: use Node v14
+
+If using `nvm` to manage node verisons, run `nvm use 14` before the following commands
 ```
-# use Node v14
-# If using NVM, run:  nvm use 14
-
 npm install
 npm run install-client
 npm run install-server
 
 cp server/.env.example server/.env
+```
 
+## Run
+
+From the root directory, just run the following script which will run both the server and client apps in the same command.
+```
 npm run dev
 ```
+
+By default, the client will run on port 3000 and the server on port 4000.
+
+
 
 ## Usage Tests
 
@@ -40,10 +49,10 @@ npm run dev
 10. Login with User account and test features
 11. Login with Admin account and test features
 12. Try to access forbidden routes (/users) from a non-admin account
-13. Try to access pages while logged out
-14. Try to access pages that don't exist
+13. Try to access pages while logged out (/restaurants)
+14. Try to access pages that don't exist (/nothing)
 
 
-## Known Issues
-* The login session expires after 30 minutes, and do not automatically refresh.
-* 
+## Notes
+* To increase the login sesison validity, we can increase the `JWT_ACCESS_EXPIRATION_MINUTES` value in the `server/.env` file.
+
