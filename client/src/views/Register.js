@@ -1,5 +1,5 @@
 // ** React Imports
-import { useContext, useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 
 // ** Custom Hooks
@@ -14,9 +14,6 @@ import { handleLogin } from '@store/authentication'
 import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-
-// ** Context
-import { AbilityContext } from '@src/utility/context/Can'
 
 // ** Custom Components
 import InputPasswordToggle from '@components/input-password-toggle'
@@ -48,8 +45,8 @@ const Register = () => {
 
   // ** Hooks
   const { skin } = useSkin()
-  const navigate = useNavigate()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const {
     control,
     setError,

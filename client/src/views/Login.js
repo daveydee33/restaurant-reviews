@@ -9,6 +9,8 @@ import useJwt from '@src/auth/jwt/useJwt'
 // ** Third Party Components
 import { useDispatch } from 'react-redux'
 import { useForm, Controller } from 'react-hook-form'
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 
 // ** Actions
 import { handleLogin } from '@store/authentication'
@@ -17,17 +19,30 @@ import { handleLogin } from '@store/authentication'
 import InputPasswordToggle from '@components/input-password-toggle'
 
 // ** Reactstrap Imports
-import { Row, Col, Form, Input, Label, Alert, Button, CardTitle } from 'reactstrap'
+import { Row, Col, Form, Input, Label, Alert, Button, CardTitle, FormFeedback } from 'reactstrap'
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
 
 const defaultValues = {
-  password: '',
-  loginEmail: ''
+  email: '',
+  password: ''
 }
 
 const Login = () => {
+  // field validations
+  const SignupSchema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup
+      .string()
+      .min(8)
+      .matches(
+        /^(?=.*[0-9])(?=.*[a-zA-Z])[a-zA-Z0-9!@#$%^&*]{8,16}$/,
+        'password must contain at least 1 number and 1 letter'
+      )
+      .required()
+  })
+
   // ** Hooks
   const { skin } = useSkin()
   const dispatch = useDispatch()
@@ -37,7 +52,7 @@ const Login = () => {
     setError,
     handleSubmit,
     formState: { errors }
-  } = useForm({ defaultValues })
+  } = useForm({ defaultValues, mode: 'onChange', resolver: yupResolver(SignupSchema) })
   const [errorText, setErrorText] = useState('')
 
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
@@ -45,17 +60,28 @@ const Login = () => {
 
   const onSubmit = data => {
     if (Object.values(data).every(field => field.length > 0)) {
-      const { loginEmail, password } = data
+      const { email, password } = data
       useJwt
-        .login({ email: loginEmail, password })
+        .login({ email, password })
         .then(res => {
-          const data = {
-            ...res.data.user,
-            accessToken: res.data.tokens.access.token,
-            refreshToken: res.data.tokens.refresh.token
+          if (res.data.error) {
+            for (const property in res.data.error) {
+              if (res.data.error[property] !== null) {
+                setError(property, {
+                  type: 'manual',
+                  message: res.data.error[property]
+                })
+              }
+            }
+          } else {
+            const data = {
+              ...res.data.user,
+              accessToken: res.data.tokens.access.token,
+              refreshToken: res.data.tokens.refresh.token
+            }
+            dispatch(handleLogin(data))
+            navigate('/')
           }
-          dispatch(handleLogin(data))
-          navigate('/')
         })
         .catch(err => {
           console.error(err)
@@ -65,7 +91,8 @@ const Login = () => {
       for (const key in data) {
         if (data[key].length === 0) {
           setError(key, {
-            type: 'manual'
+            type: 'manual',
+            message: `Please enter a valid ${key}`
           })
         }
       }
@@ -142,8 +169,8 @@ const Login = () => {
                   Email
                 </Label>
                 <Controller
-                  id='loginEmail'
-                  name='loginEmail'
+                  id='email'
+                  name='email'
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -151,11 +178,12 @@ const Login = () => {
                       autoFocus
                       type='email'
                       placeholder='john@example.com'
-                      invalid={errors.loginEmail && true}
+                      invalid={errors.email && true}
                       {...field}
                     />
                   )}
                 />
+                {errors.email ? <FormFeedback>{errors.email.message}</FormFeedback> : null}
               </div>
               <div className='mb-1'>
                 <div className='d-flex justify-content-between'>
@@ -176,6 +204,7 @@ const Login = () => {
                     />
                   )}
                 />
+                {errors.password ? <FormFeedback>{errors.password.message}</FormFeedback> : null}
               </div>
               {errorText && (
                 <Alert color='danger'>
