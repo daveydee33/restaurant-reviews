@@ -15,7 +15,6 @@ describe('User routes', () => {
 
     beforeEach(() => {
       newUser = {
-        name: faker.name.findName(),
         email: faker.internet.email().toLowerCase(),
         password: 'password1',
         role: 'user',
@@ -34,7 +33,6 @@ describe('User routes', () => {
       expect(res.body).not.toHaveProperty('password');
       expect(res.body).toEqual({
         id: expect.anything(),
-        name: newUser.name,
         email: newUser.email,
         role: newUser.role,
         isEmailVerified: false,
