@@ -46,7 +46,7 @@ const FormPanel = props => {
     const payload = {
       rating,
       comment,
-      dateVisited: dateVisited && new Date(dateVisited[0])
+      dateVisited: dateVisited && new Date(dateVisited)
     }
 
     if (!isObjEmpty(selectedReview)) {
@@ -119,6 +119,7 @@ const FormPanel = props => {
             className='form-control'
             value={dateVisited}
             options={{
+              dateFormat: 'n/j/Y',
               maxDate: 'today'
             }}
             onChange={date => setDateVisited(date)}
