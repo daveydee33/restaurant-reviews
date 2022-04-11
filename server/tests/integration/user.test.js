@@ -41,7 +41,7 @@ describe('User routes', () => {
       const dbUser = await User.findById(res.body.id);
       expect(dbUser).toBeDefined();
       expect(dbUser.password).not.toBe(newUser.password);
-      expect(dbUser).toMatchObject({ name: newUser.name, email: newUser.email, role: newUser.role, isEmailVerified: false });
+      expect(dbUser).toMatchObject({ email: newUser.email, role: newUser.role, isEmailVerified: false });
     });
 
     test('should be able to create an admin as well', async () => {
@@ -158,7 +158,6 @@ describe('User routes', () => {
       expect(res.body.results).toHaveLength(3);
       expect(res.body.results[0]).toEqual({
         id: userOne._id.toHexString(),
-        name: userOne.name,
         email: userOne.email,
         role: userOne.role,
         isEmailVerified: userOne.isEmailVerified,
@@ -179,27 +178,6 @@ describe('User routes', () => {
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send()
         .expect(httpStatus.FORBIDDEN);
-    });
-
-    test('should correctly apply filter on name field', async () => {
-      await insertUsers([userOne, userTwo, admin]);
-
-      const res = await request(app)
-        .get('/v1/users')
-        .set('Authorization', `Bearer ${adminAccessToken}`)
-        .query({ name: userOne.name })
-        .send()
-        .expect(httpStatus.OK);
-
-      expect(res.body).toEqual({
-        results: expect.any(Array),
-        page: 1,
-        limit: 10,
-        totalPages: 1,
-        totalResults: 1,
-      });
-      expect(res.body.results).toHaveLength(1);
-      expect(res.body.results[0].id).toBe(userOne._id.toHexString());
     });
 
     test('should correctly apply filter on role field', async () => {
@@ -362,7 +340,6 @@ describe('User routes', () => {
       expect(res.body).toEqual({
         id: userOne._id.toHexString(),
         email: userOne.email,
-        name: userOne.name,
         role: userOne.role,
         isEmailVerified: userOne.isEmailVerified,
       });
@@ -480,13 +457,12 @@ describe('User routes', () => {
     test('should return 200 and successfully update user if data is ok', async () => {
       await insertUsers([userOne]);
       const updateBody = {
-        name: faker.name.findName(),
         email: faker.internet.email().toLowerCase(),
         password: 'newPassword1',
       };
 
       const res = await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.OK);
@@ -494,7 +470,6 @@ describe('User routes', () => {
       expect(res.body).not.toHaveProperty('password');
       expect(res.body).toEqual({
         id: userOne._id.toHexString(),
-        name: updateBody.name,
         email: updateBody.email,
         role: 'user',
         isEmailVerified: false,
@@ -503,44 +478,44 @@ describe('User routes', () => {
       const dbUser = await User.findById(userOne._id);
       expect(dbUser).toBeDefined();
       expect(dbUser.password).not.toBe(updateBody.password);
-      expect(dbUser).toMatchObject({ name: updateBody.name, email: updateBody.email, role: 'user' });
+      expect(dbUser).toMatchObject({ email: updateBody.email, role: 'user' });
     });
 
     test('should return 401 error if access token is missing', async () => {
       await insertUsers([userOne]);
-      const updateBody = { name: faker.name.findName() };
+      const updateBody = { email: userOne.email };
 
-      await request(app).patch(`/v1/users/${userOne._id}`).send(updateBody).expect(httpStatus.UNAUTHORIZED);
+      await request(app).put(`/v1/users/${userOne._id}`).send(updateBody).expect(httpStatus.UNAUTHORIZED);
     });
 
-    test('should return 403 if user is updating another user', async () => {
-      await insertUsers([userOne, userTwo]);
-      const updateBody = { name: faker.name.findName() };
+    // test('should return 403 if user is updating another user', async () => {
+    //   await insertUsers([userOne, userTwo]);
+    //   const updateBody = { email: faker.email.findName() };
 
-      await request(app)
-        .patch(`/v1/users/${userTwo._id}`)
-        .set('Authorization', `Bearer ${userOneAccessToken}`)
-        .send(updateBody)
-        .expect(httpStatus.FORBIDDEN);
-    });
+    //   await request(app)
+    //     .put(`/v1/users/${userTwo._id}`)
+    //     .set('Authorization', `Bearer ${userOneAccessToken}`)
+    //     .send(updateBody)
+    //     .expect(httpStatus.FORBIDDEN);
+    // });
 
-    test('should return 200 and successfully update user if admin is updating another user', async () => {
-      await insertUsers([userOne, admin]);
-      const updateBody = { name: faker.name.findName() };
+    // test('should return 200 and successfully update user if admin is updating another user', async () => {
+    //   await insertUsers([userOne, admin]);
+    //   const updateBody = { email: faker.email.findName() };
 
-      await request(app)
-        .patch(`/v1/users/${userOne._id}`)
-        .set('Authorization', `Bearer ${adminAccessToken}`)
-        .send(updateBody)
-        .expect(httpStatus.OK);
-    });
+    //   await request(app)
+    //     .put(`/v1/users/${userOne._id}`)
+    //     .set('Authorization', `Bearer ${adminAccessToken}`)
+    //     .send(updateBody)
+    //     .expect(httpStatus.OK);
+    // });
 
     test('should return 404 if admin is updating another user that is not found', async () => {
       await insertUsers([admin]);
-      const updateBody = { name: faker.name.findName() };
+      const updateBody = { email: admin.email };
 
       await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.NOT_FOUND);
@@ -548,10 +523,10 @@ describe('User routes', () => {
 
     test('should return 400 error if userId is not a valid mongo id', async () => {
       await insertUsers([admin]);
-      const updateBody = { name: faker.name.findName() };
+      const updateBody = { email: admin.email };
 
       await request(app)
-        .patch(`/v1/users/invalidId`)
+        .put(`/v1/users/invalidId`)
         .set('Authorization', `Bearer ${adminAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
@@ -562,7 +537,7 @@ describe('User routes', () => {
       const updateBody = { email: 'invalidEmail' };
 
       await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
@@ -573,7 +548,7 @@ describe('User routes', () => {
       const updateBody = { email: userTwo.email };
 
       await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
@@ -584,7 +559,7 @@ describe('User routes', () => {
       const updateBody = { email: userOne.email };
 
       await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.OK);
@@ -595,7 +570,7 @@ describe('User routes', () => {
       const updateBody = { password: 'passwo1' };
 
       await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
@@ -606,7 +581,7 @@ describe('User routes', () => {
       const updateBody = { password: 'password' };
 
       await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
@@ -614,7 +589,7 @@ describe('User routes', () => {
       updateBody.password = '11111111';
 
       await request(app)
-        .patch(`/v1/users/${userOne._id}`)
+        .put(`/v1/users/${userOne._id}`)
         .set('Authorization', `Bearer ${userOneAccessToken}`)
         .send(updateBody)
         .expect(httpStatus.BAD_REQUEST);
