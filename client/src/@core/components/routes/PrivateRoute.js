@@ -14,25 +14,23 @@ const PrivateRoute = ({ children, route }) => {
     let action = null
     let resource = null
     let restrictedRoute = false
+    let adminOnly = false
 
     if (route.meta) {
       action = route.meta.action
       resource = route.meta.resource
       restrictedRoute = route.meta.restricted
+      adminOnly = route.meta.adminOnly
     }
     if (!user) {
-      return <Navigate to='/auth/not-auth' />
+      return <Navigate to='/login' />
     }
     // if (user && restrictedRoute) {
-    //   return <Navigate to='/' />
+    //   return <Navigate to='/restaurants' />
     // }
-
-    if (user && restrictedRoute && user.role !== 'admin') {
-      return <Navigate to='/auth/not-auth' />
+    if (user && restrictedRoute && adminOnly && user.role !== 'admin') {
+      return <Navigate to='/auth/not-auth' replace />
     }
-    // if (user && !ability.can(action || 'read', resource)) {
-    //   return <Navigate to='/misc/not-authorized' replace />
-    // }
   }
 
   return <Suspense fallback={null}>{children}</Suspense>

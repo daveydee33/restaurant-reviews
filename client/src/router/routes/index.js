@@ -55,16 +55,23 @@ const Routes = [
     path: '/users',
     element: <Users />,
     meta: {
-      restricted: true
+      restricted: true,
+      adminOnly: true
     }
   },
   {
     path: '/restaurants',
-    element: <Restaurants />
+    element: <Restaurants />,
+    meta: {
+      restricted: true
+    }
   },
   {
     path: '/restaurants/:id',
-    element: <RestaurantDetail />
+    element: <RestaurantDetail />,
+    meta: {
+      restricted: true
+    }
   },
   {
     path: '/login',
