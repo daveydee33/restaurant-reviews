@@ -15,9 +15,6 @@ import { useForm, Controller } from 'react-hook-form'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-// ** Icons Imports
-import { Facebook, Twitter, Mail, GitHub } from 'react-feather'
-
 // ** Context
 import { AbilityContext } from '@src/utility/context/Can'
 
@@ -25,7 +22,7 @@ import { AbilityContext } from '@src/utility/context/Can'
 import InputPasswordToggle from '@components/input-password-toggle'
 
 // ** Reactstrap Imports
-import { Row, Col, CardTitle, CardText, Form, Label, Input, Button, FormFeedback, Alert } from 'reactstrap'
+import { Row, Col, CardTitle, Form, Label, Input, Button, FormFeedback, Alert } from 'reactstrap'
 
 // ** Styles
 import '@styles/react/pages/page-authentication.scss'
@@ -50,7 +47,6 @@ const Register = () => {
   })
 
   // ** Hooks
-  const ability = useContext(AbilityContext)
   const { skin } = useSkin()
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -86,7 +82,6 @@ const Register = () => {
               accessToken: res.data.tokens.access.token,
               refreshToken: res.data.tokens.refresh.token
             }
-            // ability.update(res.data.user.ability) // TODO:
             dispatch(handleLogin(data))
             navigate('/')
           }
@@ -171,25 +166,7 @@ const Register = () => {
             <CardTitle tag='h2' className='fw-bold mb-1'>
               Register
             </CardTitle>
-            {/* <CardText className='mb-2'>Make your app management easy and fun!</CardText> */}
             <Form action='/' className='auth-register-form mt-2' onSubmit={handleSubmit(onSubmit)}>
-              {/*               
-              <div className='mb-1'>
-                <Label className='form-label' for='register-username'>
-                  Username
-                </Label>
-                <Controller
-                  id='username'
-                  name='username'
-                  control={control}
-                  render={({ field }) => (
-                    <Input autoFocus placeholder='johndoe' invalid={errors.username && true} {...field} />
-                  )}
-                />
-                {errors.username ? <FormFeedback>{errors.username.message}</FormFeedback> : null}
-              </div>
- */}
-
               <div className='mb-1'>
                 <Label className='form-label' for='register-email'>
                   Email
@@ -232,7 +209,6 @@ const Register = () => {
               {errorText && (
                 <Alert color='danger' data-cy='error'>
                   <div className='alert-body'>
-                    {/* <span className='fw-bold'>Error</span> */}
                     <span>{errorText}</span>
                   </div>
                 </Alert>

@@ -1,28 +1,14 @@
 import { useState, useContext, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardTitle,
-  CardText,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-  Col,
-  Row
-} from 'reactstrap'
+import { Card, CardHeader, CardBody, CardTitle, CardText, Form, Label, Input, Button, Col, Row } from 'reactstrap'
 import { restaurantContext } from '../../utility/context/restaurant/RestaurantState'
 import ReviewForm from './ReviewForm'
 import StarRatings from 'react-star-ratings'
 import Flatpickr from 'react-flatpickr'
-import BreadCrumbs from '@components/breadcrumbs'
 import { isAdmin } from '../../auth/utils'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
 
-const SecondPage = () => {
+const DetailsPage = () => {
   const params = useParams()
   const { id } = params
   const { getRestaurant, current, submitReview, deleteReview, updateReview } = useContext(restaurantContext)
@@ -46,7 +32,6 @@ const SecondPage = () => {
       setDateVisited()
       getRestaurant(id)
     } catch (error) {
-      // TODO:
       console.error('Error submitting review')
       console.error(error)
     }
@@ -117,14 +102,12 @@ const SecondPage = () => {
             <Label for='rating' className='mt-1'>
               Rating <span className='text-danger'>*</span>
             </Label>
-            {/* <Input id='rating' value={rating} placeholder='rating' onChange={e => setRating(e.target.value)} /> */}
             <div>
               <StarRatings
                 rating={rating}
                 starRatedColor='gold'
                 starDimension='2rem'
                 starSpacing='0'
-                // className='m-5'
                 changeRating={val => setRating(val)}
               />
             </div>
@@ -138,10 +121,6 @@ const SecondPage = () => {
               className='form-control'
               value={dateVisited}
               options={{
-                // altInput: true,
-                // altFormat: 'F j, Y',
-                // dateFormat: 'Y-m-d',
-                time: false,
                 dateFormat: 'n/j/Y',
                 maxDate: 'today'
               }}
@@ -172,7 +151,6 @@ const SecondPage = () => {
         </CardBody>
       </Card>
 
-      {/* <span className='text-right'>Total Reviews: {current?.reviews?.length}</span> */}
       {current?.reviews.map(review => {
         return (
           <Card key={review._id}>
@@ -183,10 +161,6 @@ const SecondPage = () => {
             </CardHeader>
             <CardBody>
               <CardText>{review.comment}</CardText>
-              {/* <CardText>{new Date(review.dateVisited).toDateString()}</CardText> */}
-              {/* <CardText>{new Date(review.dateVisited).toISOString().split('T')[0]}</CardText> */}
-              {/* <CardText>{new Date(review.dateVisited).toDateString()}</CardText> */}
-              {/* <CardText>{new Date(review.dateVisited).toString()}</CardText> */}
               <CardText>{new Date(review.dateVisited).toLocaleString().split(',')[0]}</CardText>
               <CardText>
                 {isAdmin() && (
@@ -229,4 +203,4 @@ const SecondPage = () => {
   )
 }
 
-export default SecondPage
+export default DetailsPage

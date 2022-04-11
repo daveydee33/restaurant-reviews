@@ -8,7 +8,7 @@ import { useRoutes, Navigate } from 'react-router-dom'
 import BlankLayout from '@layouts/BlankLayout'
 
 // ** Utils
-import { getUserData, getHomeRouteForLoggedInUser } from '../utility/Utils'
+import { getUserData } from '../utility/Utils'
 
 // ** Components
 const Error = lazy(() => import('../views/Error'))
