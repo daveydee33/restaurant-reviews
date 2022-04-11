@@ -10,7 +10,6 @@ const createRestaurant = catchAsync(async (req, res) => {
 });
 
 const getRestaurants = catchAsync(async (req, res) => {
-  // const filter = pick(req.query, ['title', 'description', 'details']);
   const filter = pick(req.query, ['q']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await restaurantService.queryRestaurants(filter, options);
