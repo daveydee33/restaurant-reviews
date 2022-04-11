@@ -133,6 +133,7 @@ const SecondPage = () => {
               Date Visited <span className='text-danger'>*</span>
             </Label>
             <Flatpickr
+              data-cy='date-picker'
               id='default-picker'
               className='form-control'
               value={dateVisited}
@@ -151,13 +152,20 @@ const SecondPage = () => {
               Comment <span className='text-danger'>*</span>
             </Label>
             <Input
+              data-cy='comment'
               id='comment'
               type='textarea'
               value={comment}
               placeholder='comment'
               onChange={e => setComment(e.target.value)}
             />
-            <Button type='submit' color='primary' className='mt-1' disabled={!rating || !dateVisited || !comment}>
+            <Button
+              data-cy='submit'
+              type='submit'
+              color='primary'
+              className='mt-1'
+              disabled={!rating || !dateVisited || !comment}
+            >
               Submit
             </Button>
           </Form>

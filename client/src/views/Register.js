@@ -199,7 +199,13 @@ const Register = () => {
                   name='email'
                   control={control}
                   render={({ field }) => (
-                    <Input type='email' placeholder='john@example.com' invalid={errors.email && true} {...field} />
+                    <Input
+                      data-cy='email'
+                      type='email'
+                      placeholder='john@example.com'
+                      invalid={errors.email && true}
+                      {...field}
+                    />
                   )}
                 />
                 {errors.email ? <FormFeedback>{errors.email.message}</FormFeedback> : null}
@@ -213,20 +219,25 @@ const Register = () => {
                   name='password'
                   control={control}
                   render={({ field }) => (
-                    <InputPasswordToggle className='input-group-merge' invalid={errors.password && true} {...field} />
+                    <InputPasswordToggle
+                      data-cy='password'
+                      className='input-group-merge'
+                      invalid={errors.password && true}
+                      {...field}
+                    />
                   )}
                 />
                 {errors.password ? <FormFeedback>{errors.password.message}</FormFeedback> : null}
               </div>
               {errorText && (
-                <Alert color='danger'>
+                <Alert color='danger' data-cy='error'>
                   <div className='alert-body'>
                     {/* <span className='fw-bold'>Error</span> */}
                     <span>{errorText}</span>
                   </div>
                 </Alert>
               )}
-              <Button type='submit' block color='primary'>
+              <Button type='submit' block color='primary' data-cy='submit'>
                 Register
               </Button>
             </Form>
