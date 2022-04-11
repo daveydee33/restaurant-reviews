@@ -140,6 +140,8 @@ const SecondPage = () => {
                 // altInput: true,
                 // altFormat: 'F j, Y',
                 // dateFormat: 'Y-m-d',
+                time: false,
+                dateFormat: 'n/j/Y',
                 maxDate: 'today'
               }}
               onChange={date => setDateVisited(date)}
@@ -174,7 +176,10 @@ const SecondPage = () => {
             <CardBody>
               <CardText>{review.comment}</CardText>
               {/* <CardText>{new Date(review.dateVisited).toDateString()}</CardText> */}
-              <CardText>{new Date(review.dateVisited).toISOString().split('T')[0]}</CardText>
+              {/* <CardText>{new Date(review.dateVisited).toISOString().split('T')[0]}</CardText> */}
+              {/* <CardText>{new Date(review.dateVisited).toDateString()}</CardText> */}
+              {/* <CardText>{new Date(review.dateVisited).toString()}</CardText> */}
+              <CardText>{new Date(review.dateVisited).toLocaleString().split(',')[0]}</CardText>
               <CardText>
                 {isAdmin() && (
                   <>

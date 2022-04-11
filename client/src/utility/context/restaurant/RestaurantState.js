@@ -81,9 +81,10 @@ export const RestaurantState = props => {
       const res = await axios.delete(`/v1/restaurants/${id}`)
       console.log(`Deleting restaurant: ${id}`, res.data)
       await dispatch({ type: DELETE_ITEM, payload: id })
-      getRestaurants(restaurantId)
+      getRestaurants()
     } catch (err) {
       console.error('Delete Restaurant error')
+      console.error(err)
     }
   }
 
