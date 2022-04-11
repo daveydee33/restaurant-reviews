@@ -1,9 +1,9 @@
-import { useState, Fragment, useEffect } from 'react'
-import { X, Plus, Trash } from 'react-feather'
-import { Modal, ModalBody, Button, Form, FormGroup, Input, Label } from 'reactstrap'
+import { useState, Fragment } from 'react'
+import { X } from 'react-feather'
+import { Modal, ModalBody, Button, Form, Input, Label } from 'reactstrap'
 import StarRatings from 'react-star-ratings'
 import Flatpickr from 'react-flatpickr'
-import { isObjEmpty, selectThemeColors } from '@utils'
+import { isObjEmpty } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
 
 const ModalHeader = props => {
@@ -63,9 +63,6 @@ const FormPanel = props => {
           >
             Update
           </Button.Ripple>
-          {/* <Button.Ripple color='secondary' onClick={handleResetFields} outline>
-            Reset
-          </Button.Ripple> */}
 
           {!isObjEmpty(selectedReview) ? (
             <Button.Ripple
@@ -86,26 +83,6 @@ const FormPanel = props => {
         </Fragment>
       )
     }
-    // else {
-    //   return (
-    //     <Fragment>
-    //       <Button
-    //         color='primary'
-    //         disabled={!title.length}
-    //         className='add-todo-item m-1'
-    //         onClick={() => {
-    //           addRestaurant(payload)
-    //           handleFormPanel()
-    //         }}
-    //       >
-    //         Create
-    //       </Button>
-    //       <Button color='secondary' onClick={handleFormPanel} outline>
-    //         Cancel
-    //       </Button>
-    //     </Fragment>
-    //   )
-    // }
   }
 
   return (
@@ -124,14 +101,12 @@ const FormPanel = props => {
           <Label for='rating' className='mt-1'>
             Rating <span className='text-danger'>*</span>
           </Label>
-          {/* <Input id='rating' value={rating} placeholder='rating' onChange={e => setRating(e.target.value)} /> */}
           <div>
             <StarRatings
               rating={rating}
               starRatedColor='gold'
               starDimension='2rem'
               starSpacing='0'
-              // className='m-5'
               changeRating={val => setRating(val)}
             />
           </div>
@@ -144,9 +119,6 @@ const FormPanel = props => {
             className='form-control'
             value={dateVisited}
             options={{
-              // altInput: true,
-              // altFormat: 'F j, Y',
-              // dateFormat: 'Y-m-d',
               maxDate: 'today'
             }}
             onChange={date => setDateVisited(date)}

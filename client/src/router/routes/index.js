@@ -26,14 +26,11 @@ const TemplateTitle = '%s - Restaurant Reviews'
 // ** Default Route
 const DefaultRoute = '/restaurants'
 
-const Home = lazy(() => import('../../views/Home'))
-const SecondPage = lazy(() => import('../../views/SecondPage'))
 const Restaurants = lazy(() => import('../../views/restaurants/index'))
 const RestaurantDetail = lazy(() => import('../../views/restaurants/Detail'))
 const Users = lazy(() => import('../../views/users/index'))
 const Login = lazy(() => import('../../views/Login'))
 const Register = lazy(() => import('../../views/Register'))
-const ForgotPassword = lazy(() => import('../../views/ForgotPassword'))
 const Error = lazy(() => import('../../views/Error'))
 
 // ** Merge Routes

@@ -7,18 +7,12 @@ import { Button } from 'reactstrap'
 // ** Custom Hooks
 import { useSkin } from '@hooks/useSkin'
 
-// ** Utils
-import { getUserData, getHomeRouteForLoggedInUser } from '@utils'
-
 // ** Styles
 import '@styles/base/pages/page-misc.scss'
 
 const NotAuthorized = () => {
   // ** Hooks
   const { skin } = useSkin()
-
-  // ** Vars
-  const user = getUserData()
 
   const illustration = skin === 'dark' ? 'not-authorized-dark.svg' : 'not-authorized.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default

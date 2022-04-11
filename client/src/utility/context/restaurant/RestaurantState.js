@@ -1,11 +1,11 @@
 import { createContext, useReducer } from 'react'
 import restaurantReducer from './restaurantReducer'
 import {
-  GET_ITEMS,
-  GET_ITEM,
-  ADD_ITEM,
-  UPDATE_ITEM,
-  DELETE_ITEM,
+  GET_RESTAURANTS,
+  GET_RESTAURANT,
+  ADD_RESTAURANT,
+  UPDATE_RESTAURANT,
+  DELETE_RESTAURANT,
   SET_CURRENT,
   CLEAR_CURRENT,
   RESET_TO_DEFAULT,
@@ -29,7 +29,7 @@ export const RestaurantState = props => {
   const getRestaurants = async () => {
     try {
       const res = await axios.get('/v1/restaurants', { params: { limit: 1000 } })
-      dispatch({ type: GET_ITEMS, payload: res.data })
+      dispatch({ type: GET_RESTAURANTS, payload: res.data })
     } catch (err) {
       console.error('Get Restaurants error')
     }
@@ -39,7 +39,7 @@ export const RestaurantState = props => {
   const getRestaurant = async id => {
     try {
       const res = await axios.get(`/v1/restaurants/${id}`, { params: { limit: 1000 } })
-      dispatch({ type: GET_ITEM, payload: res.data })
+      dispatch({ type: GET_RESTAURANT, payload: res.data })
     } catch (err) {
       console.error('Get Restaurants error')
     }
@@ -54,7 +54,7 @@ export const RestaurantState = props => {
     }
     try {
       const res = await axios.post('/v1/restaurants', restaurant, config)
-      dispatch({ type: ADD_ITEM, payload: res.data })
+      dispatch({ type: ADD_RESTAURANT, payload: res.data })
     } catch (err) {
       console.error('Add Restaurant error', err)
     }
@@ -69,7 +69,7 @@ export const RestaurantState = props => {
     }
     try {
       const res = await axios.put(`/v1/restaurants/${id}`, data, config)
-      dispatch({ type: UPDATE_ITEM, payload: res.data })
+      dispatch({ type: UPDATE_RESTAURANT, payload: res.data })
     } catch (err) {
       console.error('Update Restaurant error', err)
     }
@@ -80,7 +80,7 @@ export const RestaurantState = props => {
     try {
       const res = await axios.delete(`/v1/restaurants/${id}`)
       console.log(`Deleting restaurant: ${id}`, res.data)
-      await dispatch({ type: DELETE_ITEM, payload: id })
+      await dispatch({ type: DELETE_RESTAURANT, payload: id })
       getRestaurants()
     } catch (err) {
       console.error('Delete Restaurant error')
@@ -139,7 +139,7 @@ export const RestaurantState = props => {
   const deleteReview = async (restaurantId, reviewId) => {
     try {
       const res = await axios.delete(`/v1/restaurants/${restaurantId}/reviews/${reviewId}`)
-      await dispatch({ type: DELETE_ITEM, payload: res.data })
+      await dispatch({ type: DELETE_RESTAURANT, payload: res.data })
       getRestaurant(restaurantId)
     } catch (err) {
       console.error('Delete review error')

@@ -1,7 +1,7 @@
-import { useState, Fragment, useEffect } from 'react'
-import { X, Plus, Trash } from 'react-feather'
+import { useState, Fragment } from 'react'
+import { X } from 'react-feather'
 import { Modal, ModalBody, Button, Form, FormGroup, Input, Label } from 'reactstrap'
-import { isObjEmpty, selectThemeColors } from '@utils'
+import { isObjEmpty } from '@utils'
 import '@styles/react/libs/react-select/_react-select.scss'
 
 const ModalHeader = props => {
@@ -72,9 +72,6 @@ const FormPanel = props => {
           >
             Update
           </Button.Ripple>
-          {/* <Button.Ripple color='secondary' onClick={handleResetFields} outline>
-            Reset
-          </Button.Ripple> */}
 
           {!isObjEmpty(selectedRestaurant) ? (
             <Button.Ripple
@@ -127,12 +124,7 @@ const FormPanel = props => {
       modalClassName='modal-slide-in sidebar-todo-modal'
     >
       <Form id='form-modal-todo' className='todo-modal' onSubmit={e => e.preventDefault()}>
-        <ModalHeader
-          // dispatch={dispatch}
-          handleFormPanel={handleFormPanel}
-        >
-          {handleSidebarTitle()}
-        </ModalHeader>
+        <ModalHeader handleFormPanel={handleFormPanel}>{handleSidebarTitle()}</ModalHeader>
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
           <FormGroup>
             <Label for='title' className='form-label'>
@@ -146,66 +138,6 @@ const FormPanel = props => {
               onChange={e => setTitle(e.target.value)}
             />
           </FormGroup>
-
-          {/* <FormGroup>
-            <Label for='description' className='form-label'>
-              Description
-            </Label>
-            <Input
-              id='description'
-              value={description}
-              placeholder='Description'
-              onChange={e => setDescription(e.target.value)}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label for='details' className='form-label'>
-              Details
-            </Label>
-            <Input
-              id='details'
-              value={details}
-              placeholder='Details'
-              type='textarea'
-              rows={6}
-              onChange={e => setDetails(e.target.value)}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label for='items' className='form-label'>
-              Words / Phrases (<i>one per line</i>)
-            </Label>
-            <Input
-              id='items'
-              value={items}
-              placeholder='Word list'
-              type='textarea'
-              rows={6}
-              onChange={e => setItems(e.target.value)}
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label for='tags' className='form-label'>
-              Tags
-            </Label>
-            <CreatableSelect
-              isMulti
-              value={tags}
-              id='tags'
-              isClearable={false}
-              options={tagOptions}
-              className='react-select'
-              classNamePrefix='select'
-              theme={selectThemeColors}
-              onChange={(data, actionMeta) => {
-                setTags(data !== null ? [...data] : [])
-              }}
-            />
-          </FormGroup> */}
-
           <FormGroup className='my-1'>{renderFooterButtons()}</FormGroup>
         </ModalBody>
       </Form>

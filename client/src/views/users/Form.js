@@ -1,5 +1,5 @@
-import { useState, Fragment, useEffect } from 'react'
-import { X, Plus, Trash } from 'react-feather'
+import { useState, Fragment } from 'react'
+import { X } from 'react-feather'
 import { Modal, ModalBody, Button, Form, FormGroup, Input, Label, Alert } from 'reactstrap'
 import Select from 'react-select'
 import { isObjEmpty, selectThemeColors } from '@utils'
@@ -90,7 +90,6 @@ const FormPanel = props => {
         <Fragment>
           <Button.Ripple
             color='primary'
-            // disabled={!email.length}
             className='m-1'
             onClick={() => {
               updateUser(selectedUser.id, payload)
@@ -99,10 +98,6 @@ const FormPanel = props => {
           >
             Update
           </Button.Ripple>
-          {/* <Button.Ripple color='secondary' onClick={handleResetFields} outline>
-            Reset
-          </Button.Ripple> */}
-
           {!isObjEmpty(selectedUser) ? (
             <Button.Ripple
               color='danger'
@@ -126,7 +121,6 @@ const FormPanel = props => {
         <Fragment>
           <Button
             color='primary'
-            // disabled={!email.length}
             className='add-todo-item m-1'
             onClick={() => {
               handleSubmit()
@@ -153,12 +147,7 @@ const FormPanel = props => {
       modalClassName='modal-slide-in sidebar-todo-modal'
     >
       <Form id='form-modal-todo' className='todo-modal' onSubmit={e => e.preventDefault()}>
-        <ModalHeader
-          // dispatch={dispatch}
-          handleFormPanel={handleFormPanel}
-        >
-          {handleSidebarTitle()}
-        </ModalHeader>
+        <ModalHeader handleFormPanel={handleFormPanel}>{handleSidebarTitle()}</ModalHeader>
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
           <Label for='email' className='form-label'>
             Email <span className='text-danger'>*</span>
@@ -184,7 +173,6 @@ const FormPanel = props => {
             theme={selectThemeColors}
             className='react-select'
             classNamePrefix='select'
-            // defaultValue={roleOptions[0]}
             value={role}
             options={roleOptions}
             isClearable={false}

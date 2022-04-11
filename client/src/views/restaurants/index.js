@@ -5,7 +5,6 @@ import { Table, Button } from 'reactstrap'
 import Form from './Form'
 import { useNavigate } from 'react-router-dom'
 import StarRatings from 'react-star-ratings'
-import BreadCrumbs from '@components/breadcrumbs'
 import { isAdmin } from '../../auth/utils'
 
 const UsersPage = () => {
@@ -24,8 +23,6 @@ const UsersPage = () => {
 
   const handleRestaurantClick = (e, restaurant) => {
     e.stopPropagation()
-    // setSelectedRestaurant(restaurant)
-    // handleFormPanel()
     navigate(`/restaurants/${restaurant.id}`)
   }
 
@@ -44,7 +41,6 @@ const UsersPage = () => {
 
   return (
     <>
-      {/* <BreadCrumbs title='Restaurants' data={[]} /> */}
       <h1 className='my-1'>Restaurants</h1>
       {isAdmin() && (
         <Button color='primary' className='m-1' onClick={handleFormPanel}>
