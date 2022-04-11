@@ -180,6 +180,7 @@ const Login = () => {
                   control={control}
                   render={({ field }) => (
                     <Input
+                      data-cy='email'
                       autoFocus
                       type='email'
                       placeholder='john@example.com'
@@ -203,7 +204,12 @@ const Login = () => {
                   name='password'
                   control={control}
                   render={({ field }) => (
-                    <InputPasswordToggle className='input-group-merge' invalid={errors.password && true} {...field} />
+                    <InputPasswordToggle
+                      data-cy='password'
+                      className='input-group-merge'
+                      invalid={errors.password && true}
+                      {...field}
+                    />
                   )}
                 />
               </div>
@@ -221,7 +227,7 @@ const Login = () => {
                   </div>
                 </Alert>
               )}
-              <Button type='submit' color='primary' block>
+              <Button data-cy='submit' type='submit' color='primary' block>
                 Login
               </Button>
             </Form>

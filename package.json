@@ -10,10 +10,13 @@
     "install-client": "npm install --prefix client",
     "install-server": "npm install --prefix server",
     "start": "npm run start --prefix server",
-    "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && npm install --prefix server && npm run build --prefix server"
+    "build": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && npm install --prefix server && npm run build --prefix server",
+    "cypress:open": "cypress open"
   },
   "author": "Dave Degeatano",
-  "devDependencies": {},
+  "devDependencies": {
+    "cypress": "^9.5.3"
+  },
   "dependencies": {
     "concurrently": "^6.2.1"
   },
